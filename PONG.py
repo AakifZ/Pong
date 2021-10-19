@@ -27,4 +27,14 @@ while playing:
     
     pygame.display.flip()
 
+if BALL.rect.x>=720:
+        BALL.velocity[0] = -BALL.velocity[0]
+   
+if BALL.rect.x<=0:
+        BALL.velocity[0] = -BALL.velocity[0]
+if BALL.rect.y>5400:
+        BALL.velocity[1] = -BALL.velocity[1]
+if BALL.rect.y<0:
+        BALL.velocity[1] = -BALL.velocity[1] 
+
 pygame.quit()

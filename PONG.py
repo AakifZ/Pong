@@ -1,5 +1,6 @@
 import pygame
 from paddle import Paddle
+from Ball import Ball
 
 
 pygame.init()
@@ -50,6 +51,7 @@ while playing:
    
     all_paddles_list.update()
     pygame.draw.rect(screen, WHITE, BALL)
+    pygame.draw.line(screen, WHITE, [450, 0], [450, 500], 5)
     all_paddles_list.draw(screen)
     
     pygame.display.flip()

@@ -41,6 +41,7 @@ BALL = pygame.Rect(WIDTH/2 - BALL_SIZE/2, HEIGHT/2 - BALL_SIZE/2, BALL_SIZE, BAL
 #The boilerplate for a standard pygame display
 playing = True
 clock = pygame.time.Clock()
+pos = 10;
 while playing:
     clock.tick(FPS)
     for event in pygame.event.get():
@@ -57,15 +58,16 @@ while playing:
     pygame.display.flip()
     
 
-    if BALL.rect.x>=720:
-        BALL.velocity[0] = -BALL.velocity[0]
+    # if BALL.rect.x>=720:
+    #     BALL.velocity[0] = -BALL.velocity[0]
 
-    if BALL.rect.x<=0:
-        BALL.velocity[0] = -BALL.velocity[0]
-    if BALL.rect.y>5400:
-        BALL.velocity[1] = -BALL.velocity[1]
-    if BALL.rect.y<0:
-        BALL.velocity[1] = -BALL.velocity[1] 
-
+    # if BALL.rect.x<=0:
+    #     BALL.velocity[0] = -BALL.velocity[0]
+    # if BALL.rect.y>5400:
+    #     BALL.velocity[1] = -BALL.velocity[1]
+    # if BALL.rect.y<0:
+    #     BALL.velocity[1] = -BALL.velocity[1] 
+    BALL.move_ip(1,0)
+    pygame.display.update()
 pygame.quit()
 

@@ -12,12 +12,13 @@ WHITE = (255,255,255)
 #Setting the dimensions of the window
 WIDTH = 900
 HEIGHT = 500
+screen_size = (900,500)
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption("PONG AI")
 
 #fps for our game, 60 should run smooth on most devices
 FPS = 60
-
+WHITE = [255, 255, 255]
 #paddle creation
 paddle1 = Paddle(WHITE, 10, 100)
 paddle1.rect.x = 20
@@ -53,6 +54,9 @@ while playing:
     all_paddles_list.update()
     pygame.draw.rect(screen, WHITE, BALL)
     pygame.draw.line(screen, WHITE, [450, 0], [450, 500], 5)
+    score_font = pygame.font.Font(None, 48)
+    screen.blit(score_font.render("0", True, WHITE), [int(0.4*screen_size[0])-10, 0])
+    screen.blit(score_font.render("0", True, WHITE), [int(0.6*screen_size[0])-10, 0])
     all_paddles_list.draw(screen)
     
     pygame.display.flip()
@@ -67,7 +71,9 @@ while playing:
     #     BALL.velocity[1] = -BALL.velocity[1]
     # if BALL.rect.y<0:
     #     BALL.velocity[1] = -BALL.velocity[1] 
+
     BALL.move_ip(1,0)
     pygame.display.update()
+
 pygame.quit()
 

@@ -14,6 +14,9 @@ HEIGHT = 500
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption("PONG AI")
 
+#fps for our game, 60 should run smooth on most devices
+FPS = 60
+
 #paddle creation
 paddle1 = Paddle(WHITE, 10, 100)
 paddle1.rect.x = 20
@@ -36,7 +39,9 @@ BALL = pygame.Rect(WIDTH/2 - BALL_SIZE/2, HEIGHT/2 - BALL_SIZE/2, BALL_SIZE, BAL
 
 #The boilerplate for a standard pygame display
 playing = True
+clock = pygame.time.Clock()
 while playing:
+    clock.tick(FPS)
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):
             playing = False

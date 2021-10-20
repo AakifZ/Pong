@@ -259,11 +259,13 @@ def timeout(func, args=(), kwargs={}, timeout_duration=1, default=None):
 
 def render(screen, paddles, ball, score, table_size):
     screen.fill(black)
-
+    image = pygame.image.load(r'./cornelly.png')
+    image = pygame.transform.scale(image, (40, 60))
+    screen.blit(image, (int(ball.get_center()[0]), int(ball.get_center()[1])))
     pygame.draw.rect(screen, white, paddles[0].frect.get_rect())
     pygame.draw.rect(screen, white, paddles[1].frect.get_rect())
 
-    pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(ball.get_center()[1])),  int(ball.frect.size[0]/2), 0)
+    pygame.draw.circle(screen,black , (int(ball.get_center()[0]), int(ball.get_center()[1])),  int(ball.frect.size[0]/2), 0)
 
 
     pygame.draw.line(screen, white, [screen.get_width()/2, 0], [screen.get_width()/2, screen.get_height()])
@@ -297,6 +299,9 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
 
 
     while max(score) < score_to_win:
+        
+        image = pygame.image.load('./cornelly.png');
+        screen.blit(image, (0,0))
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
         paddles[0].move(paddles[1].frect, ball.frect, table_size)

@@ -259,7 +259,7 @@ def timeout(func, args=(), kwargs={}, timeout_duration=1, default=None):
 
 def render(screen, paddles, ball, score, table_size):
     screen.fill(black)
-    image = pygame.image.load(r'./cornelly.png')
+    image = pygame.image.load(r'./cornellytransparent.png')
     image = pygame.transform.scale(image, (40, 60))
     screen.blit(image, (int(ball.get_center()[0]), int(ball.get_center()[1])))
     pygame.draw.rect(screen, white, paddles[0].frect.get_rect())
@@ -362,14 +362,14 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
 def init_game():
     table_size = (440, 280)
     paddle_size = (10, 70)
-    ball_size = (15, 15)
+    ball_size = (40, 60)
     paddle_speed = 1
     max_angle = 45
 
     paddle_bounce = 1.2
     wall_bounce = 1.00
     dust_error = 0.00
-    init_speed_mag = 2
+    init_speed_mag = 5
     timeout = 0.0003
     clock_rate = 80
     turn_wait_rate = 3

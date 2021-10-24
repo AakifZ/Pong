@@ -37,10 +37,9 @@ from fRect import fRect
 # In pygame, all colors are represented by RGB values in the format (R, G, B).
 white = [255, 255, 255]
 black = [0, 0, 0]
-
+global GOAL_SOUND
 # This clock is used to control the frame rate of the game
 clock = pygame.time.Clock()
-
 def render(screen, paddles, ball, score, table_size):
     """Used for updating the score, paddle positions, and ball position on the screen
 
@@ -55,12 +54,22 @@ def render(screen, paddles, ball, score, table_size):
             None
     """
     screen.fill(black)
-
+    
     pygame.draw.rect(screen, white, paddles[0].frect.get_rect())
     pygame.draw.rect(screen, white, paddles[1].frect.get_rect())
 
+    MICHAEL = pygame.image.load("sprites/MIKEY.png")
+    MICHAEL = pygame.transform.scale(MICHAEL, (200,100))
+    
+
     pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(
         ball.get_center()[1])),  int(ball.frect.size[0]/2), 0)
+
+    #placing my boy heehee right on the ball and subtracting by half the width and half the height to place the exact midpoint of heehee on the ball
+    screen.blit(MICHAEL, (int(ball.get_center()[0]) - 100, int(ball.get_center()[1]) - 50))
+
+    
+        
 
     pygame.draw.line(screen, white, [screen.get_width(
     )/2, 0], [screen.get_width()/2, screen.get_height()])
@@ -85,14 +94,18 @@ def check_point(score, ball, table_size):
         Returns:
             tuple
     """
+    GOAL_SOUND = pygame.mixer.Sound("sounds/HEEHEE4.mp3")
+    GOAL_SOUND.set_volume(0.3)
     # Determines if the right paddle scored the point
     if ball.frect.pos[0]+ball.size[0]/2 < 0:
+        GOAL_SOUND.play()
         score[1] += 1
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
                     ball.wall_bounce, ball.dust_error, ball.init_speed_mag)
         return (ball, score)
     # Determines if the left paddle scored the point
     elif ball.frect.pos[0]+ball.size[0]/2 >= table_size[0]:
+        GOAL_SOUND.play()
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
                     ball.wall_bounce, ball.dust_error, ball.init_speed_mag)
         score[0] += 1
@@ -124,7 +137,6 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
             if(event.type == pygame.QUIT):
                 pygame.quit()
                 exit()
-       
 
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
@@ -184,7 +196,7 @@ def init_game():
 
     table_size = (440, 280)
     paddle_size = (10, 70)
-    ball_size = (15, 15)
+    ball_size = (50, 15)
     paddle_speed = 1
     max_angle = 45
 
@@ -231,5 +243,8 @@ def init_game():
 
 # This makes it so that the game can only be run by this file.
 if __name__ == '__main__':
+    pygame.mixer.pre_init()
+    
     pygame.init()
+    
     init_game()

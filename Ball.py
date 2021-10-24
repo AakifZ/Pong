@@ -25,6 +25,7 @@ class Ball:
         self.dust_error = dust_error
         self.init_speed_mag = init_speed_mag
         self.prev_bounce = None
+        global SOUND_EFFECT 
 
     def get_center(self):
         """Finds the (x,y) coordinates for the middle of the ball
@@ -71,7 +72,7 @@ class Ball:
             # Determines if the ball has collided with the wall
             if self.frect.get_rect().colliderect(wall_rect):
                 c = 0
-
+                
                 while self.frect.get_rect().colliderect(wall_rect):
                     self.frect.move_ip(-.1 *
                                        self.speed[0], -.1*self.speed[1], move_factor)
@@ -88,9 +89,16 @@ class Ball:
                     c -= 1  # move by roughly the same amount as the ball had traveled into the wall
                 moved = 1
 
+       
         for paddle in paddles:
          # Determines if the ball has collided with either of the two paddles
             if self.frect.intersect(paddle.frect):
+                SOUND_EFFECT = pygame.mixer.Sound("sounds/AUDIO_CORRECTED_SHAMONE.wav")
+                SOUND_EFFECT.set_volume(0.2)
+
+                if(pygame.mixer.get_busy() == False):
+                    SOUND_EFFECT.play()
+                
                 if (paddle.facing == 1 and self.get_center()[0] < paddle.frect.pos[0] + paddle.frect.size[0]/2) or \
                         (paddle.facing == 0 and self.get_center()[0] > paddle.frect.pos[0] + paddle.frect.size[0]/2):
                     continue

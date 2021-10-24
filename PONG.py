@@ -120,6 +120,12 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
     score = [0, 0]
 
     while max(score) < score_to_win:
+        for event in pygame.event.get():
+            if(event.type == pygame.QUIT):
+                pygame.quit()
+                exit()
+       
+
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
         paddles[0].move(paddles[1].frect, ball.frect, table_size)
@@ -164,6 +170,7 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
     clock.tick(2)
 
     pygame.event.pump()
+    
     while any(pygame.key.get_pressed()):
         pygame.event.pump()
         clock.tick(30)

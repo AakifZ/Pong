@@ -178,14 +178,13 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
     print(score)
 
 
-def init_game():
+def init_game(gamemode, dificulty):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
 
     table_size = (440, 280)
     paddle_size = (10, 70)
     ball_size = (15, 15)
-    paddle_speed = 1
     max_angle = 45
 
     paddle_bounce = 1.2
@@ -199,19 +198,27 @@ def init_game():
     screen = pygame.display.set_mode(table_size)
     pygame.display.set_caption('Pong')
 
-    paddles = [Paddle((20, table_size[1]/2), paddle_size, paddle_speed, max_angle,  1),
-               Paddle((table_size[0]-20, table_size[1]/2), paddle_size, paddle_speed, max_angle, 0)]
+    import AI
+
+    paddles = []
+    if gamemode == "singleplayer":
+        # player vs computer
+        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+        paddles[0].move_getter = AI.get_move_ai
+        paddles[1].move_getter = AI.get_move_player_right
+
+    elif gamemode == "multiplayer":
+        # player vs player
+        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, False),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+        paddles[0].move_getter = AI.get_move_player_left
+        paddles[1].move_getter = AI.get_move_player_right
+    else:
+        # computer vs computer
+        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, True)]
+        paddles[0].move_getter = AI.get_move_ai
+        paddles[1].move_getter = AI.get_move_ai
     ball = Ball(table_size, ball_size, paddle_bounce,
                 wall_bounce, dust_error, init_speed_mag)
-
-    import chaser_ai
-
-    # To have The Chaser play against your AI engine,
-    # store your code in student_ai.py, import student_ai,
-    # and set paddles[1].move_getter to student_ai.pong_ai
-    paddles[0].move_getter = chaser_ai.pong_ai
-    # directions_from_input # chaser_ai.pong_ai
-    paddles[1].move_getter = chaser_ai.pong_ai
 
     game_loop(screen, paddles, ball, table_size,
               clock_rate, turn_wait_rate, score_to_win, 1)
@@ -228,8 +235,3 @@ def init_game():
               clock_rate, turn_wait_rate, score_to_win, 1)
 
     pygame.quit()
-
-# This makes it so that the game can only be run by this file.
-if __name__ == '__main__':
-    pygame.init()
-    init_game()

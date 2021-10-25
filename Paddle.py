@@ -12,12 +12,13 @@ from fRect import fRect
 class Paddle:
     """Represents each paddle used for playing the game. Only two paddles get initialized"""
 
-    def __init__(self, pos, size, speed, max_angle,  facing):
+    def __init__(self, pos, size, speed, max_angle, facing, isAI):
         self.frect = fRect((pos[0]-size[0]/2, pos[1]-size[1]/2), size)
         self.speed = speed
         self.size = size
         self.facing = facing
         self.max_angle = max_angle
+        self.isAI = isAI
 
     def move(self, enemy_frect, ball_frect, table_size):
         """responsible for moving the paddle
@@ -32,8 +33,7 @@ class Paddle:
             None
         """
 
-        direction = self.move_getter(
-            self.frect.copy(), enemy_frect.copy(), ball_frect.copy(), tuple(table_size))
+        direction = self.get_direction(enemy_frect, ball_frect, table_size)
 
         if direction == "up":
             self.frect.move_ip(0, -self.speed)
@@ -65,3 +65,9 @@ class Paddle:
         sign = 1-2*self.facing
 
         return sign*rel_dist_from_c*self.max_angle*math.pi/180
+    
+    def get_direction(self, enemy_frect, ball_frect, table_size):
+        if self.isAI:
+            return self.move_getter(self.frect.copy(), enemy_frect.copy(), ball_frect.copy(), tuple(table_size))
+        else:
+            return self.move_getter()

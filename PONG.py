@@ -185,7 +185,6 @@ def init_game():
     table_size = (440, 280)
     paddle_size = (10, 70)
     ball_size = (15, 15)
-    paddle_speed = 1
     max_angle = 45
 
     paddle_bounce = 1.2
@@ -199,19 +198,23 @@ def init_game():
     screen = pygame.display.set_mode(table_size)
     pygame.display.set_caption('Pong')
 
-    paddles = [Paddle((20, table_size[1]/2), paddle_size, paddle_speed, max_angle,  1),
-               Paddle((table_size[0]-20, table_size[1]/2), paddle_size, paddle_speed, max_angle, 0)]
+    import AI
+
+    # paddles = [Paddle((20, table_size[1]/2), paddle_size, paddle_speed, max_angle,  1),
+    #            Paddle((table_size[0]-20, table_size[1]/2), paddle_size, paddle_speed, max_angle, 0)]
+
+    paddles = [AI.get_paddle_difficulty("medium", (20, table_size[1]/2), paddle_size, max_angle, 1, True),
+               AI.get_paddle_difficulty("hard",(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+
     ball = Ball(table_size, ball_size, paddle_bounce,
                 wall_bounce, dust_error, init_speed_mag)
 
-    import AI
+    
 
-    # To have The Chaser play against your AI engine,
-    # store your code in student_ai.py, import student_ai,
-    # and set paddles[1].move_getter to student_ai.pong_ai
-    paddles[0].move_getter = AI.pong_ai
-    # directions_from_input # chaser_ai.pong_ai
-    paddles[1].move_getter = AI.pong_ai
+    # directions_from_input # AI.easy_ai
+    paddles[0].move_getter = AI.get_move_ai
+    # directions_from_input # AI.medium_ai
+    paddles[1].move_getter = AI.get_move_player
 
     game_loop(screen, paddles, ball, table_size,
               clock_rate, turn_wait_rate, score_to_win, 1)

@@ -204,14 +204,14 @@ def init_game():
     ball = Ball(table_size, ball_size, paddle_bounce,
                 wall_bounce, dust_error, init_speed_mag)
 
-    import chaser_ai
+    import AI
 
     # To have The Chaser play against your AI engine,
     # store your code in student_ai.py, import student_ai,
     # and set paddles[1].move_getter to student_ai.pong_ai
-    paddles[0].move_getter = chaser_ai.pong_ai
+    paddles[0].move_getter = AI.pong_ai
     # directions_from_input # chaser_ai.pong_ai
-    paddles[1].move_getter = chaser_ai.pong_ai
+    paddles[1].move_getter = AI.pong_ai
 
     game_loop(screen, paddles, ball, table_size,
               clock_rate, turn_wait_rate, score_to_win, 1)

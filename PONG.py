@@ -131,8 +131,13 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
             None
     """
     score = [0, 0]
-
+    #SONG = pygame.mixer.Sound("sounds/pickypluckpluckyayuhya.wav")
+    SONG = pygame.mixer.Sound("sounds/asuperretrofuturisticsynthwavetypebeat.wav")
+    SONG.set_volume(0.3)
     while max(score) < score_to_win:
+        if(pygame.mixer.get_busy() == False):
+            SONG.play()
+            
         for event in pygame.event.get():
             if(event.type == pygame.QUIT):
                 pygame.quit()
@@ -189,6 +194,8 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
 
     print(score)
 
+global table_size
+table_size = (440, 280)
 
 def init_game():
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
@@ -243,7 +250,9 @@ def init_game():
 
 # This makes it so that the game can only be run by this file.
 if __name__ == '__main__':
-    pygame.mixer.pre_init()
+    
+    #pygame.mixer.pre_init()
+    pygame.mixer.init()
     
     pygame.init()
     

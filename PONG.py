@@ -178,7 +178,7 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
     print(score)
 
 
-def init_game():
+def init_game(gamemode, dificulty):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
 
@@ -200,21 +200,25 @@ def init_game():
 
     import AI
 
-    # paddles = [Paddle((20, table_size[1]/2), paddle_size, paddle_speed, max_angle,  1),
-    #            Paddle((table_size[0]-20, table_size[1]/2), paddle_size, paddle_speed, max_angle, 0)]
+    paddles = []
+    if gamemode == "singleplayer":
+        # player vs computer
+        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+        paddles[0].move_getter = AI.get_move_ai
+        paddles[1].move_getter = AI.get_move_player_right
 
-    paddles = [AI.get_paddle_difficulty("medium", (20, table_size[1]/2), paddle_size, max_angle, 1, True),
-               AI.get_paddle_difficulty("hard",(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
-
+    elif gamemode == "multiplayer":
+        # player vs player
+        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, False),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+        paddles[0].move_getter = AI.get_move_player_left
+        paddles[1].move_getter = AI.get_move_player_right
+    else:
+        # computer vs computer
+        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, True)]
+        paddles[0].move_getter = AI.get_move_ai
+        paddles[1].move_getter = AI.get_move_ai
     ball = Ball(table_size, ball_size, paddle_bounce,
                 wall_bounce, dust_error, init_speed_mag)
-
-    
-
-    # directions_from_input # AI.easy_ai
-    paddles[0].move_getter = AI.get_move_ai
-    # directions_from_input # AI.medium_ai
-    paddles[1].move_getter = AI.get_move_player
 
     game_loop(screen, paddles, ball, table_size,
               clock_rate, turn_wait_rate, score_to_win, 1)
@@ -231,8 +235,3 @@ def init_game():
               clock_rate, turn_wait_rate, score_to_win, 1)
 
     pygame.quit()
-
-# This makes it so that the game can only be run by this file.
-if __name__ == '__main__':
-    pygame.init()
-    init_game()

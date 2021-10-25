@@ -24,7 +24,7 @@ class Gamemode:
         screen_center = screen_rect.center
  
         pygame.display.set_caption('Gamemode')
-        background_image = pygame.image.load("./assets/menu_background_1080x720.jpg")
+        background_image = pygame.image.load("./assets/menu_background_1080x720.bmp")
 
         button_dictionary = self.get_buttons(screen)
 

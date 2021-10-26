@@ -11,7 +11,7 @@ mainClock = pygame.time.Clock()
 
 class Gamemode:
     """Gamemode class used for organizing the gamemode window's attributes and styling"""
-    def __init__(self, screen_width, screen_height, is_active, gamemode="singleplayer", difficulty="easy"):
+    def __init__(self, is_active = True, screen_width = 1080, screen_height = 720, gamemode="singleplayer", difficulty="easy"):
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.is_active = is_active

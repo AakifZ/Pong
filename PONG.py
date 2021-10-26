@@ -193,7 +193,7 @@ def init_game(gamemode, dificulty):
     init_speed_mag = 2
     clock_rate = 80
     turn_wait_rate = 3
-    score_to_win = 10
+    score_to_win = 11
 
     screen = pygame.display.set_mode(table_size)
     pygame.display.set_caption('Pong')

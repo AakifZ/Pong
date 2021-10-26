@@ -12,7 +12,7 @@ font = pygame_menu.font.FONT_NEVIS
 class menu():
 
         myimage = pygame_menu.baseimage.BaseImage(
-        '/Users/adamchaplin/Desktop/Pong/assets/new.jpg',
+        './assets/new.jpg',
         drawing_mode=pygame_menu.baseimage.IMAGE_MODE_FILL
         )
         mytheme = pygame_menu.themes.THEME_DARK

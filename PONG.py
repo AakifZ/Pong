@@ -34,6 +34,8 @@ from Ball import Ball
 from Paddle import Paddle
 from fRect import fRect
 
+
+
 # In pygame, all colors are represented by RGB values in the format (R, G, B).
 white = [255, 255, 255]
 black = [0, 0, 0]
@@ -178,10 +180,10 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
     print(score)
 
 
-def init_game(gamemode, dificulty):
+def init_game(gamemode = 'singleplayer', difficulty = 'easy' ):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
-
+    
     table_size = (440, 280)
     paddle_size = (10, 70)
     ball_size = (15, 15)
@@ -203,18 +205,18 @@ def init_game(gamemode, dificulty):
     paddles = []
     if gamemode == "singleplayer":
         # player vs computer
-        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+        paddles = [AI.get_paddle_difficulty(difficulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(difficulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
         paddles[0].move_getter = AI.get_move_ai
         paddles[1].move_getter = AI.get_move_player_right
 
     elif gamemode == "multiplayer":
         # player vs player
-        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, False),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+        paddles = [AI.get_paddle_difficulty(difficulty, (20, table_size[1]/2), paddle_size, max_angle, 1, False),AI.get_paddle_difficulty(difficulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
         paddles[0].move_getter = AI.get_move_player_left
         paddles[1].move_getter = AI.get_move_player_right
     else:
         # computer vs computer
-        paddles = [AI.get_paddle_difficulty(dificulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(dificulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, True)]
+        paddles = [AI.get_paddle_difficulty(difficulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(difficulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, True)]
         paddles[0].move_getter = AI.get_move_ai
         paddles[1].move_getter = AI.get_move_ai
     ball = Ball(table_size, ball_size, paddle_bounce,

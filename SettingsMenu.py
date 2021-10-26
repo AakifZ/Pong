@@ -1,11 +1,13 @@
 import pygame, pygame_menu
-
+from PONG import init_game
 
 class SettingsMenu:
     global resolution
     global fps
+    global theme
     resolution = (440, 280)
     fps = 30
+    theme = 1
     def __init__(self, resolution = (440,280), fps = 30):
         
 
@@ -26,13 +28,16 @@ class SettingsMenu:
 
         menu.add.selector("Screen Res: ", [("440x280",1), ("800x500",2), ("1200x750",3)], onchange=setResolution)
         menu.add.selector("FPS: ", [(" 30 ", 1), (" 60 ", 2), ("120", 3)], onchange=setFPS)
+        menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2)], onchange=setTheme)
         menu.add.button('Save', saveSettings)
         
         menu.mainloop(WINDOW) 
         
  
 
-
+def setTheme(selected, value):
+    global theme
+    theme = value
 
 def setResolution(selected, value):
     global resolution
@@ -44,12 +49,14 @@ def setResolution(selected, value):
         resolution = (1200, 750)
     
 def setFPS(selected, value):
+    global fps
     if(value == 1):
         fps = 30
     elif(value == 2):
         fps = 60
     else:
         fps = 120
+    
 
 def saveSettings():
     print(resolution)
@@ -57,6 +64,7 @@ def saveSettings():
     #print(f"menu height is now {menu.get_height()}")
     pygame_menu.menu.Menu('heh', resolution[0], resolution[1])
     updateMenuSize()
+    init_game(resolution, fps, theme)
     #updateMenuSize()
     #print(f"Changing to {resolution}")
         
@@ -75,4 +83,4 @@ def updateMenuSize():
 
     
 
-#menuu = SettingsMenu()
+menuu = SettingsMenu()

@@ -9,9 +9,11 @@ import math
 
 from fRect import fRect
 class Ball:
+
     """Ball used for playing the game. Only one ball gets initialized."""
 
-    def __init__(self, table_size, size, paddle_bounce, wall_bounce, dust_error, init_speed_mag):
+
+    def __init__(self, table_size, size, paddle_bounce, wall_bounce, dust_error, init_speed_mag, theme):
         rand_ang = (.4+.4*random.random())*math.pi * \
             (1-2*(random.random() > .5))+.5*math.pi
         speed = (init_speed_mag*math.cos(rand_ang),
@@ -25,7 +27,18 @@ class Ball:
         self.dust_error = dust_error
         self.init_speed_mag = init_speed_mag
         self.prev_bounce = None
-        global SOUND_EFFECT 
+        global SOUND_EFFECT
+        global THEME
+        THEME = theme
+        self.setThemeSound()
+
+    def setThemeSound(self):
+        if(THEME == 1):
+            pass
+        else:
+            global SOUND_EFFECT
+            SOUND_EFFECT = pygame.mixer.Sound("sounds/AUDIO_CORRECTED_SHAMONE.wav")
+            SOUND_EFFECT.set_volume(0.2)
 
     def get_center(self):
         """Finds the (x,y) coordinates for the middle of the ball
@@ -52,6 +65,7 @@ class Ball:
         return math.sqrt(self.speed[0]**2+self.speed[1]**2)
 
     def move(self, paddles, table_size, move_factor):
+        
         """responsible for moving the ball
 
         Parameters:
@@ -92,10 +106,10 @@ class Ball:
        
         for paddle in paddles:
          # Determines if the ball has collided with either of the two paddles
+            
             if self.frect.intersect(paddle.frect):
-                SOUND_EFFECT = pygame.mixer.Sound("sounds/AUDIO_CORRECTED_SHAMONE.wav")
-                SOUND_EFFECT.set_volume(0.2)
-
+                if(THEME == 2):
+                    SOUND_EFFECT.play()
                 if(pygame.mixer.get_busy() == False):
                     SOUND_EFFECT.play()
                 

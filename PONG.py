@@ -27,7 +27,7 @@ import time
 import random
 import os
 from pygame.locals import *
-from SettingsMenu import SettingsMenu
+#from SettingsMenu import SettingsMenu
 
 import math
 
@@ -39,11 +39,22 @@ from fRect import fRect
 white = [255, 255, 255]
 black = [0, 0, 0]
 global GOAL_SOUND
+global THEME
 # This clock is used to control the frame rate of the game
 clock = pygame.time.Clock()
 
-
-
+def theme(screen,ball, value):
+    if value == 1:
+        pass
+    else:
+        MICHAEL = pygame.image.load("sprites/MIKEY.png")
+        MICHAEL = pygame.transform.scale(MICHAEL, (200,100))
+        #placing my boy heehee right on the ball and subtracting by half the width and half the height to place the exact midpoint of heehee on the ball
+        screen.blit(MICHAEL, (int(ball.get_center()[0]) - 100, int(ball.get_center()[1]) - 50))
+        global GOAL_SOUND
+        GOAL_SOUND = pygame.mixer.Sound("sounds/HEEHEE4.mp3")
+        GOAL_SOUND.set_volume(0.3)
+    
 def render(screen, paddles, ball, score, table_size):
     """Used for updating the score, paddle positions, and ball position on the screen
 
@@ -62,15 +73,13 @@ def render(screen, paddles, ball, score, table_size):
     pygame.draw.rect(screen, white, paddles[0].frect.get_rect())
     pygame.draw.rect(screen, white, paddles[1].frect.get_rect())
 
-    MICHAEL = pygame.image.load("sprites/MIKEY.png")
-    MICHAEL = pygame.transform.scale(MICHAEL, (200,100))
+    
     
 
     pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(
         ball.get_center()[1])),  int(ball.frect.size[0]/2), 0)
-
-    #placing my boy heehee right on the ball and subtracting by half the width and half the height to place the exact midpoint of heehee on the ball
-    screen.blit(MICHAEL, (int(ball.get_center()[0]) - 100, int(ball.get_center()[1]) - 50))
+    
+    theme(screen, ball, THEME)
     
     pygame.draw.line(screen, white, [screen.get_width(
     )/2, 0], [screen.get_width()/2, screen.get_height()])
@@ -95,20 +104,22 @@ def check_point(score, ball, table_size):
         Returns:
             tuple
     """
-    GOAL_SOUND = pygame.mixer.Sound("sounds/HEEHEE4.mp3")
-    GOAL_SOUND.set_volume(0.3)
+
+    
     # Determines if the right paddle scored the point
     if ball.frect.pos[0]+ball.size[0]/2 < 0:
-        GOAL_SOUND.play()
+        if(THEME == 2):
+            GOAL_SOUND.play()
         score[1] += 1
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
-                    ball.wall_bounce, ball.dust_error, ball.init_speed_mag)
+                    ball.wall_bounce, ball.dust_error, ball.init_speed_mag, THEME)
         return (ball, score)
     # Determines if the left paddle scored the point
     elif ball.frect.pos[0]+ball.size[0]/2 >= table_size[0]:
-        GOAL_SOUND.play()
+        if(THEME == 2):
+            GOAL_SOUND.play()
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
-                    ball.wall_bounce, ball.dust_error, ball.init_speed_mag)
+                    ball.wall_bounce, ball.dust_error, ball.init_speed_mag, THEME)
         score[0] += 1
         return (ball, score)
 
@@ -139,7 +150,8 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
     pause = False
     while max(score) < score_to_win:
         if(pygame.mixer.get_busy() == False):
-            SONG.play()
+            if(THEME == 1):
+                SONG.play()
             
         for event in pygame.event.get():
             if(event.type == pygame.QUIT):
@@ -148,7 +160,7 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
             
             ballSpeed = ball.speed
             
-            if(event.type == pygame.KEYDOWN):
+        """if(event.type == pygame.KEYDOWN):
                 
                 if(event.key == pygame.K_p):
                     if(pause == False):
@@ -158,14 +170,14 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                         GameState(1)
                     
                     pass
-                """if(pause == False):
+                if(pause == False):
                         
                         pause = True
                         paused()
                     else:
                         pause = False
-                        paused()"""
-                """ if(Paused == True):
+                        paused()
+                if(Paused == True):
                         ball.speed = ballSpeed
                         paddle_speed = 1
                         Paused = False
@@ -238,13 +250,17 @@ table_size = (440, 280)
 
 
 
-def init_game():
+def init_game(resolution, fps, theme):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
-
-    table_size = (440, 280)
+    global THEME
+    THEME = theme
+    table_size = resolution
     paddle_size = (10, 70)
-    ball_size = (50, 15)
+    if(theme == 2):
+        ball_size = (50, 15)
+    else:
+        ball_size = (15,15)
     global paddle_speed
     paddle_speed = 1
     max_angle = 45
@@ -254,7 +270,7 @@ def init_game():
     dust_error = 0.00
     init_speed_mag = 2
     global clock_rate
-    clock_rate = 80
+    clock_rate = fps
     turn_wait_rate = 3
     score_to_win = 10
 
@@ -264,7 +280,7 @@ def init_game():
     paddles = [Paddle((20, table_size[1]/2), paddle_size, paddle_speed, max_angle,  1),
                Paddle((table_size[0]-20, table_size[1]/2), paddle_size, paddle_speed, max_angle, 0)]
     ball = Ball(table_size, ball_size, paddle_bounce,
-                wall_bounce, dust_error, init_speed_mag)
+                wall_bounce, dust_error, init_speed_mag, theme)
 
     import chaser_ai
 
@@ -292,9 +308,6 @@ def init_game():
     pygame.quit()
 
 
-def GameState(val):
-    if(val == 1):
-        self.state = init_game()
     
 # This makes it so that the game can only be run by this file.
 if __name__ == '__main__':
@@ -304,5 +317,5 @@ if __name__ == '__main__':
     
     pygame.init()
     
-    GameState(1)
+    
 

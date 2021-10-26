@@ -27,6 +27,7 @@ import time
 import random
 import os
 from pygame.locals import *
+from SettingsMenu import SettingsMenu
 
 import math
 
@@ -40,6 +41,9 @@ black = [0, 0, 0]
 global GOAL_SOUND
 # This clock is used to control the frame rate of the game
 clock = pygame.time.Clock()
+
+
+
 def render(screen, paddles, ball, score, table_size):
     """Used for updating the score, paddle positions, and ball position on the screen
 
@@ -67,10 +71,7 @@ def render(screen, paddles, ball, score, table_size):
 
     #placing my boy heehee right on the ball and subtracting by half the width and half the height to place the exact midpoint of heehee on the ball
     screen.blit(MICHAEL, (int(ball.get_center()[0]) - 100, int(ball.get_center()[1]) - 50))
-
     
-        
-
     pygame.draw.line(screen, white, [screen.get_width(
     )/2, 0], [screen.get_width()/2, screen.get_height()])
 
@@ -134,6 +135,8 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
     #SONG = pygame.mixer.Sound("sounds/pickypluckpluckyayuhya.wav")
     SONG = pygame.mixer.Sound("sounds/asuperretrofuturisticsynthwavetypebeat.wav")
     SONG.set_volume(0.3)
+    global pause
+    pause = False
     while max(score) < score_to_win:
         if(pygame.mixer.get_busy() == False):
             SONG.play()
@@ -142,6 +145,38 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
             if(event.type == pygame.QUIT):
                 pygame.quit()
                 exit()
+            
+            ballSpeed = ball.speed
+            
+            if(event.type == pygame.KEYDOWN):
+                
+                if(event.key == pygame.K_p):
+                    if(pause == False):
+                        menuu = SettingsMenu((440,280), 30)
+                            
+                    else:
+                        GameState(1)
+                    
+                    pass
+                """if(pause == False):
+                        
+                        pause = True
+                        paused()
+                    else:
+                        pause = False
+                        paused()"""
+                """ if(Paused == True):
+                        ball.speed = ballSpeed
+                        paddle_speed = 1
+                        Paused = False
+                        print("Game is unpaused")
+                        print(ballSpeed)
+                    elif(Paused == False):
+                        ball.speed = (0,0)
+                        paddle_speed = 0
+                        Paused = True
+                        print("Game is paused")"""
+                                        
 
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
@@ -194,8 +229,14 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
 
     print(score)
 
+
+
+
+
 global table_size
 table_size = (440, 280)
+
+
 
 def init_game():
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
@@ -204,6 +245,7 @@ def init_game():
     table_size = (440, 280)
     paddle_size = (10, 70)
     ball_size = (50, 15)
+    global paddle_speed
     paddle_speed = 1
     max_angle = 45
 
@@ -211,6 +253,7 @@ def init_game():
     wall_bounce = 1.00
     dust_error = 0.00
     init_speed_mag = 2
+    global clock_rate
     clock_rate = 80
     turn_wait_rate = 3
     score_to_win = 10
@@ -248,6 +291,11 @@ def init_game():
 
     pygame.quit()
 
+
+def GameState(val):
+    if(val == 1):
+        self.state = init_game()
+    
 # This makes it so that the game can only be run by this file.
 if __name__ == '__main__':
     
@@ -256,4 +304,5 @@ if __name__ == '__main__':
     
     pygame.init()
     
-    init_game()
+    GameState(1)
+

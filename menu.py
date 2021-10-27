@@ -4,6 +4,7 @@ from pygame_menu.baseimage import BaseImage
 import pygame_menu.font
 from PONG import init_game
 from Gamemode import create_gamemode_window
+from SettingsMenu import createSettingsMenu
 
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
@@ -26,7 +27,7 @@ class menu():
         mainmenu.add.text_input("Enter name: ", default= "User")
         mainmenu.add.button('Play',  init_game)
         mainmenu.add.button('Game Options', create_gamemode_window)
-        mainmenu.add.button('Settings')
+        mainmenu.add.button('Settings', createSettingsMenu)
         mainmenu.add.button("Leaderboard")
         mainmenu.add.button("Quit", pygame_menu.events.EXIT)
 

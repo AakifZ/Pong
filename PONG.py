@@ -27,9 +27,11 @@ import time
 import random
 import os
 from pygame.locals import *
+import glob
+#from SettingsMenu import SettingsMenu
 
 import math
-
+from Ball import DVDCollision
 from Ball import Ball
 from Paddle import Paddle
 from fRect import fRect
@@ -39,9 +41,43 @@ from fRect import fRect
 # In pygame, all colors are represented by RGB values in the format (R, G, B).
 white = [255, 255, 255]
 black = [0, 0, 0]
-
+global GOAL_SOUND
+global THEME
+global DVD
+DVDimages = glob.glob("sprites/DVD/*.png")
+DVD = pygame.image.load("sprites/DVD/DVDWhite.png")
+DVD = pygame.transform.scale(DVD, (100, 50))
 # This clock is used to control the frame rate of the game
 clock = pygame.time.Clock()
+
+def theme(screen,ball, value):
+    if value == 1:
+        pass
+    elif value == 2:
+        MICHAEL = pygame.image.load("sprites/MIKEY.png")
+        MICHAEL = pygame.transform.scale(MICHAEL, (150,75))
+        #placing my boy heehee right on the ball and subtracting by half the width and half the height to place the exact midpoint of heehee on the ball
+        screen.blit(MICHAEL, (int(ball.get_center()[0]) - 75, int(ball.get_center()[1]) - 37.5))
+        global GOAL_SOUND
+        GOAL_SOUND = pygame.mixer.Sound("sounds/HEEHEE4.mp3")
+        GOAL_SOUND.set_volume(0.3)
+    else:
+        pass
+        #DVD = pygame.image.load("sprites/DVD/DVDWhite.png")
+        #DVD = pygame.transform.scale(DVD, (100, 50))
+        #screen.blit(DVD, (int(ball.get_center()[0]) - 50, int(ball.get_center()[1]) - 25))
+
+def DVDHandler(screen, ball):
+    
+    random_DVD = random.choice(DVDimages)
+    global DVD
+    DVD = pygame.image.load(random_DVD)
+    DVD = pygame.transform.scale(DVD, (100, 50))
+    return DVD
+    #screen.blit(DVD, (int(ball.get_center()[0]) - 100, int(ball.get_center()[1]) - 25))
+    
+    print(f"The random dvd: {random_DVD}")
+    pass
 
 def render(screen, paddles, ball, score, table_size):
     """Used for updating the score, paddle positions, and ball position on the screen
@@ -57,13 +93,18 @@ def render(screen, paddles, ball, score, table_size):
             None
     """
     screen.fill(black)
-
+    
     pygame.draw.rect(screen, white, paddles[0].frect.get_rect())
     pygame.draw.rect(screen, white, paddles[1].frect.get_rect())
 
-    pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(
+    
+    
+    if(THEME == 1):
+        pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(
         ball.get_center()[1])),  int(ball.frect.size[0]/2), 0)
-
+    
+    theme(screen, ball, THEME)
+    
     pygame.draw.line(screen, white, [screen.get_width(
     )/2, 0], [screen.get_width()/2, screen.get_height()])
 
@@ -72,7 +113,12 @@ def render(screen, paddles, ball, score, table_size):
                 int(0.4*table_size[0])-8, 0])
     screen.blit(score_font.render(str(score[1]), True, white), [
                 int(0.6*table_size[0])-8, 0])
-
+    global DVD
+    
+    #DVD = DVDHandler(screen, ball)
+    if(THEME == 3):
+        screen.blit(DVD, (int(ball.get_center()[0]) - 50, int(ball.get_center()[1]) - 25))
+    
     pygame.display.flip()
 
 
@@ -87,16 +133,22 @@ def check_point(score, ball, table_size):
         Returns:
             tuple
     """
+
+    
     # Determines if the right paddle scored the point
     if ball.frect.pos[0]+ball.size[0]/2 < 0:
+        if(THEME == 2):
+            GOAL_SOUND.play()
         score[1] += 1
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
-                    ball.wall_bounce, ball.dust_error, ball.init_speed_mag)
+                    ball.wall_bounce, ball.dust_error, ball.init_speed_mag, THEME)
         return (ball, score)
     # Determines if the left paddle scored the point
     elif ball.frect.pos[0]+ball.size[0]/2 >= table_size[0]:
+        if(THEME == 2):
+            GOAL_SOUND.play()
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
-                    ball.wall_bounce, ball.dust_error, ball.init_speed_mag)
+                    ball.wall_bounce, ball.dust_error, ball.init_speed_mag, THEME)
         score[0] += 1
         return (ball, score)
 
@@ -120,13 +172,58 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
             None
     """
     score = [0, 0]
-
+    #SONG = pygame.mixer.Sound("sounds/pickypluckpluckyayuhya.wav")
+    SONG = pygame.mixer.Sound("sounds/asuperretrofuturisticsynthwavetypebeat.wav")
+    SONG.set_volume(0.3)
+    global pause
+    pause = False
     while max(score) < score_to_win:
+        if(pygame.mixer.get_busy() == False):
+            if(THEME == 1):
+                SONG.play()
+            
         for event in pygame.event.get():
             if(event.type == pygame.QUIT):
                 pygame.quit()
                 exit()
-       
+            if(THEME == 3 and event.type == DVDCollision):
+                global DVD
+                DVD = DVDHandler(screen, ball)
+                #screen.blit(DVD, (0,0))
+                #print(f"The string is: {random_DVD}")
+                #print("dvd collided")
+    
+
+            
+        """if(event.type == pygame.KEYDOWN):
+                
+                if(event.key == pygame.K_p):
+                    if(pause == False):
+                        menuu = SettingsMenu((440,280), 30)
+                            
+                    else:
+                        GameState(1)
+                    
+                    pass
+                if(pause == False):
+                        
+                        pause = True
+                        paused()
+                    else:
+                        pause = False
+                        paused()
+                if(Paused == True):
+                        ball.speed = ballSpeed
+                        paddle_speed = 1
+                        Paused = False
+                        print("Game is unpaused")
+                        print(ballSpeed)
+                    elif(Paused == False):
+                        ball.speed = (0,0)
+                        paddle_speed = 0
+                        Paused = True
+                        print("Game is paused")"""
+                                        
 
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
@@ -180,20 +277,37 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
     print(score)
 
 
-def init_game(gamemode = 'singleplayer', difficulty = 'easy' ):
+
+
+
+global table_size
+table_size = (440, 280)
+
+
+
+def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440, 280), fps = 60, theme = 1):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
-    
-    table_size = (440, 280)
+    global THEME
+    THEME = theme
+    table_size = resolution
     paddle_size = (10, 70)
-    ball_size = (15, 15)
+    if(theme == 1):
+        ball_size = (15, 15)
+    elif(theme == 2):
+        ball_size = (40,50)
+    else:
+        ball_size = (95, 60)
+    global paddle_speed
+    paddle_speed = 5
     max_angle = 45
 
     paddle_bounce = 1.2
     wall_bounce = 1.00
     dust_error = 0.00
-    init_speed_mag = 2
-    clock_rate = 80
+    init_speed_mag = 5
+    global clock_rate
+    clock_rate = fps
     turn_wait_rate = 3
     score_to_win = 11
 
@@ -201,7 +315,11 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy' ):
     pygame.display.set_caption('Pong')
 
     import AI
-
+    """paddles = [Paddle((20, table_size[1]/2), paddle_size, paddle_speed, max_angle,  1),
+               Paddle((table_size[0]-20, table_size[1]/2), paddle_size, paddle_speed, max_angle, 0)]
+    ball = Ball(table_size, ball_size, paddle_bounce,
+                wall_bounce, dust_error, init_speed_mag, theme)
+"""
     paddles = []
     if gamemode == "singleplayer":
         # player vs computer
@@ -220,7 +338,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy' ):
         paddles[0].move_getter = AI.get_move_ai
         paddles[1].move_getter = AI.get_move_ai
     ball = Ball(table_size, ball_size, paddle_bounce,
-                wall_bounce, dust_error, init_speed_mag)
+                wall_bounce, dust_error, init_speed_mag, theme)
 
     game_loop(screen, paddles, ball, table_size,
               clock_rate, turn_wait_rate, score_to_win, 1)
@@ -237,3 +355,16 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy' ):
               clock_rate, turn_wait_rate, score_to_win, 1)
 
     pygame.quit()
+
+
+    
+# This makes it so that the game can only be run by this file.
+if __name__ == '__main__':
+    
+    #pygame.mixer.pre_init()
+    pygame.mixer.init()
+    
+    pygame.init()
+    
+    
+

@@ -27,8 +27,8 @@ class SettingsMenu:
 
 
         menu.add.selector("Screen Res: ", [("440x280",1), ("800x500",2), ("1200x750",3)], onchange=setResolution)
-        menu.add.selector("FPS: ", [(" 30 ", 1), (" 60 ", 2), ("120", 3)], onchange=setFPS)
-        menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2)], onchange=setTheme)
+        menu.add.selector("FPS: ", [(" 30 ", 1), (" 60 ", 2), ("120", 3), ("1000", 4)], onchange=setFPS)
+        menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3)], onchange=setTheme)
         menu.add.button('Save', saveSettings)
         
         menu.mainloop(WINDOW) 
@@ -54,8 +54,10 @@ def setFPS(selected, value):
         fps = 30
     elif(value == 2):
         fps = 60
-    else:
+    elif(value == 3):
         fps = 120
+    else:
+        fps = 1000
     
 
 def saveSettings():

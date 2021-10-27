@@ -16,8 +16,9 @@ class Ball:
     def __init__(self, table_size, size, paddle_bounce, wall_bounce, dust_error, init_speed_mag, theme):
         rand_ang = (.4+.4*random.random())*math.pi * \
             (1-2*(random.random() > .5))+.5*math.pi
-        speed = (init_speed_mag*math.cos(rand_ang),
+        speed = (init_speed_mag*math.cos(rand_ang) ,
                  init_speed_mag*math.sin(rand_ang))
+    
         pos = (table_size[0]/2, table_size[1]/2)
         self.frect = fRect((pos[0]-size[0]/2, pos[1]-size[1]/2), size)
         self.speed = speed
@@ -32,10 +33,12 @@ class Ball:
         THEME = theme
         self.setThemeSound()
 
+    
+
     def setThemeSound(self):
-        if(THEME == 1):
+        if(THEME == 1 or THEME == 3):
             pass
-        else:
+        elif(THEME == 2):
             global SOUND_EFFECT
             SOUND_EFFECT = pygame.mixer.Sound("sounds/AUDIO_CORRECTED_SHAMONE.wav")
             SOUND_EFFECT.set_volume(0.2)
@@ -86,7 +89,7 @@ class Ball:
             # Determines if the ball has collided with the wall
             if self.frect.get_rect().colliderect(wall_rect):
                 c = 0
-                
+                detectCollision(self)
                 while self.frect.get_rect().colliderect(wall_rect):
                     self.frect.move_ip(-.1 *
                                        self.speed[0], -.1*self.speed[1], move_factor)
@@ -108,10 +111,11 @@ class Ball:
          # Determines if the ball has collided with either of the two paddles
             
             if self.frect.intersect(paddle.frect):
+                detectCollision(self)
                 if(THEME == 2):
                     SOUND_EFFECT.play()
-                if(pygame.mixer.get_busy() == False):
-                    SOUND_EFFECT.play()
+                    if(pygame.mixer.get_busy() == False):
+                        SOUND_EFFECT.play()
                 
                 if (paddle.facing == 1 and self.get_center()[0] < paddle.frect.pos[0] + paddle.frect.size[0]/2) or \
                         (paddle.facing == 0 and self.get_center()[0] > paddle.frect.pos[0] + paddle.frect.size[0]/2):
@@ -165,3 +169,16 @@ class Ball:
 
         if not moved:
             self.frect.move_ip(self.speed[0], self.speed[1], move_factor)
+
+global DVDCollision
+DVDCollision = USEREVENT + 1
+my_event = pygame.event.Event(DVDCollision, message="BAD CAT")
+
+def detectCollision(self):
+    global my_event
+    pygame.event.post(my_event)
+    #DVD = pygame.image.load("sprites/DVD/DVDBlue.png")
+    #DVD = pygame.transform.scale(DVD, (100, 50))
+
+    #return DVD
+    

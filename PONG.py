@@ -181,7 +181,7 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
         if(pygame.mixer.get_busy() == False):
             if(THEME == 1):
                 SONG.play()
-            
+        
         for event in pygame.event.get():
             if(event.type == pygame.QUIT):
                 pygame.quit()
@@ -192,38 +192,21 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                 #screen.blit(DVD, (0,0))
                 #print(f"The string is: {random_DVD}")
                 #print("dvd collided")
-    
-
-            
-        """if(event.type == pygame.KEYDOWN):
                 
-                if(event.key == pygame.K_p):
-                    if(pause == False):
-                        menuu = SettingsMenu((440,280), 30)
-                            
-                    else:
-                        GameState(1)
-                    
-                    pass
-                if(pause == False):
-                        
-                        pause = True
-                        paused()
-                    else:
-                        pause = False
-                        paused()
-                if(Paused == True):
-                        ball.speed = ballSpeed
-                        paddle_speed = 1
-                        Paused = False
-                        print("Game is unpaused")
-                        print(ballSpeed)
-                    elif(Paused == False):
-                        ball.speed = (0,0)
-                        paddle_speed = 0
-                        Paused = True
-                        print("Game is paused")"""
-                                        
+            if(event.type == pygame.KEYDOWN):
+                
+                if(event.key == pygame.K_p and ball.speed != (0,0)):
+                    ballSpeed = ball.speed
+                    ball.speed = (0,0)
+                    paddleLeftSpeed = paddles[0].speed
+                    paddleRightSpeed = paddles[1].speed
+                    paddles[0].speed = 0
+                    paddles[1].speed = 0
+                elif(event.key == pygame.K_p):
+                    ball.speed = ballSpeed
+                    paddles[0].speed = paddleLeftSpeed
+                    paddles[1].speed = paddleRightSpeed
+                
 
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
@@ -298,7 +281,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
         ball_size = (40,50)
     else:
         ball_size = (95, 60)
-    global paddle_speed
+
     paddle_speed = 5
     max_angle = 45
 
@@ -349,7 +332,13 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
     pygame.display.flip()
     clock.tick(4)
 
+    print(f"The 0 paddle has AI is {paddles[0].isAI} and 1 paddle has AI is {paddles[1].isAI}")
     paddles[0].move_getter, paddles[1].move_getter = paddles[1].move_getter, paddles[0].move_getter
+
+    
+    #paddles[0], paddles[1] = paddles[1], paddles[0]
+    print(f"The 0 paddle has AI is {paddles[0].isAI} and 1 paddle has AI is {paddles[1].isAI}")
+
 
     game_loop(screen, paddles, ball, table_size,
               clock_rate, turn_wait_rate, score_to_win, 1)

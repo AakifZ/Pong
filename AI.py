@@ -59,9 +59,9 @@ def get_move_player_left():
         return "up"
 
 def get_paddle_difficulty(difficulty, fRect, paddle_size, max_angle, facing, isAI):
-    easy_speed = 1
-    medium_speed = 2
-    hard_speed = 3
+    easy_speed = 4
+    medium_speed = 5
+    hard_speed = 6
 
     if difficulty == "easy":
         return Paddle(fRect, paddle_size, easy_speed, max_angle, facing, isAI)

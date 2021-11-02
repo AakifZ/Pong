@@ -10,8 +10,9 @@ from SettingsMenu import createSettingsMenu
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
 font = pygame_menu.font.FONT_NEVIS
+globalName = ""
 class menu():
-
+        pygame.init()
         myimage = pygame_menu.baseimage.BaseImage(
         './assets/new.jpg',
         drawing_mode=pygame_menu.baseimage.IMAGE_MODE_FILL
@@ -23,8 +24,11 @@ class menu():
         mytheme.background_color=(myimage)
 
         def TextVal(name): 
-                print("Player name is: ", name)
-        
+                globalName= name
+                file1 = open("name.txt","w")
+                file1.write(name + " \n")
+        def getName():
+                return globalName
         mainmenu = pygame_menu.Menu("Welcome to PONG!", 1080, 720,theme=mytheme)
         mainmenu.add.text_input("Enter name: ", default= "Player", onchange=TextVal)
         mainmenu.add.button('Play',  init_game)

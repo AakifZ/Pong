@@ -21,10 +21,11 @@ class menu():
         mytheme.title_font = pygame_menu.font.FONT_NEVIS
         mytheme.background_color=(myimage)
 
-
+        def TextVal(name): 
+                print("Player name is: ", name)
         
         mainmenu = pygame_menu.Menu("Welcome to PONG!", 1080, 720,theme=mytheme)
-        mainmenu.add.text_input("Enter name: ", default= "User")
+        mainmenu.add.text_input("Enter name: ", default= "Player", onchange=TextVal)
         mainmenu.add.button('Play',  init_game)
         mainmenu.add.button('Game Options', create_gamemode_window)
         mainmenu.add.button('Settings', createSettingsMenu)
@@ -32,3 +33,5 @@ class menu():
         mainmenu.add.button("Quit", pygame_menu.events.EXIT)
 
         mainmenu.mainloop(surface)
+
+

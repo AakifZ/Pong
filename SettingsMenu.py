@@ -31,8 +31,7 @@ def createSettingsMenu( resolution = (1080,720), fps = 30):
 
     global menu
     menu = pygame_menu.Menu("Settings", WINDOW.get_width(), WINDOW.get_height(), theme=customTheme)
-
-
+    menu.add.button('Back', createSettingsMenu)
     menu.add.selector("Screen Res: ", [("440x280",1), ("800x500",2), ("1200x750",3)], onchange=setResolution)
     menu.add.selector("FPS: ", [(" 30 ", 1), (" 60 ", 2), ("120", 3), ("1000", 4)], onchange=setFPS)
     menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3)], onchange=setTheme)

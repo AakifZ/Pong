@@ -271,7 +271,7 @@ table_size = (440, 280)
 
 
 
-def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440, 280), fps = 60, theme = 1):
+def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440, 280), fps = 60, theme = 1, score = 11):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
     global THEME
@@ -295,7 +295,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
     global clock_rate
     clock_rate = fps
     turn_wait_rate = 3
-    score_to_win = 11
+    score_to_win = score
 
     screen = pygame.display.set_mode(table_size)
     pygame.display.set_caption('Pong')

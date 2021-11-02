@@ -20,7 +20,7 @@
 #   This code runs with Python 2 and requires PyGame for Python 2
 #   Download PyGame here: https://bitbucket.org/pygame/pygame/downloads
 
-
+import pygame_menu
 import pygame
 import sys
 import time
@@ -28,6 +28,7 @@ import random
 import os
 from pygame.locals import *
 import glob
+
 #from SettingsMenu import SettingsMenu
 
 import math
@@ -35,8 +36,8 @@ from Ball import DVDCollision
 from Ball import Ball
 from Paddle import Paddle
 from fRect import fRect
-
-
+from PauseMenu import RESUMEGAME
+from PauseMenu import pauseMenu
 
 # In pygame, all colors are represented by RGB values in the format (R, G, B).
 white = [255, 255, 255]
@@ -202,11 +203,13 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                     paddleRightSpeed = paddles[1].speed
                     paddles[0].speed = 0
                     paddles[1].speed = 0
-                elif(event.key == pygame.K_p):
-                    ball.speed = ballSpeed
-                    paddles[0].speed = paddleLeftSpeed
-                    paddles[1].speed = paddleRightSpeed
+                    pauseMenu(screen.get_width(), screen.get_height())
                 
+            if(event.type == RESUMEGAME):
+                ball.speed = ballSpeed
+                paddles[0].speed = paddleLeftSpeed
+                paddles[1].speed = paddleRightSpeed
+
 
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)

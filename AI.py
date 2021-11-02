@@ -47,7 +47,6 @@ def get_move_player_right():
     elif keys[pygame.K_UP]:
         return "up"
 
-
 def get_move_player_left():
     """Return "up" or "down", depending on which key the player presses. 
     In singleplayer mode, the user uses the up and down arrow keys. In multiplayer mode, the left player used the 'w' and 's' keys, 

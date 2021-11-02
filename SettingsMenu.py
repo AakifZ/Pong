@@ -9,19 +9,22 @@ global theme
 resolution = (440, 280)
 fps = 30
 theme = 1
-def createSettingsMenu( resolution = (440,280), fps = 30):
+def createSettingsMenu( resolution = (1080,720), fps = 30):
     
-
     pygame.init()
     pygame.display.set_caption("Settings")
     WINDOW = pygame.display.set_mode(resolution)
     
+
+
     #Creating a custom theme
     customTheme = pygame_menu.Theme(background_color=(0,0,0,0), title_background_color=(0,255,200), 
         title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
         widget_font=pygame_menu.font.FONT_BEBAS,
         title_font_color=(0,0,0),
         title_font=pygame_menu.font.FONT_BEBAS)
+
+    
 
     global menu
     menu = pygame_menu.Menu("Settings", WINDOW.get_width(), WINDOW.get_height(), theme=customTheme)
@@ -79,7 +82,7 @@ def saveSettings():
     #print(f"menu height is now {menu.get_height()}")
     pygame_menu.menu.Menu('heh', resolution[0], resolution[1])
     updateMenuSize()
-    init_game(gamemode = 'singleplayer', difficulty = 'medium', resolution= resolution, fps = fps, theme = theme)
+    init_game(gamemode = 'computer', difficulty = 'medium', resolution= resolution, fps = fps, theme = theme)
     #updateMenuSize()
     #print(f"Changing to {resolution}")
         

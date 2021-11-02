@@ -55,6 +55,7 @@ def start_game():
 def update_display():
     menu.clear()
     menu.add.label('Choose Difficulty Below', max_char=-1, font_size=45, background_color=DARK_BLUE, font_color=WHITE)
-    menu.add.selector('Difficulty:', [('Easy', 1), ('Medium', 2), ('Hard', 3)], onchange=choose_difficulty, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30)
+    menu.add.selector('Left Paddle Difficulty:', [('Easy', 1), ('Medium', 2), ('Hard', 3)], onchange=choose_difficulty, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30,align=pygame_menu.locals.ALIGN_LEFT)
+    menu.add.selector('Right Paddle Difficulty:',[('Easy', 1), ('Medium', 2), ('Hard', 3)], onchange=choose_difficulty, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30,align=pygame_menu.locals.ALIGN_RIGHT)
     menu.add.button('Start Game', start_game, background_color=GRAY, font_color=WHITE, font_size=30)
     menu.add.button('Quit', pygame_menu.events.EXIT, background_color=DARK_BLUE, font_color=WHITE, font_size=25)

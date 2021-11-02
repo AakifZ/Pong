@@ -36,6 +36,8 @@ def get_move_ai(paddle_frect, other_paddle_frect, ball_frect, table_size):
     else:
         return "up"
 
+
+
 def get_move_player_right():
     """Return "up" or "down", depending on which key the player presses. 
     In singleplayer mode, the user uses the up and down arrow keys. In multiplayer mode, the left player used the 'w' and 's' keys, 

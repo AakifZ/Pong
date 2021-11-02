@@ -20,7 +20,7 @@
 #   This code runs with Python 2 and requires PyGame for Python 2
 #   Download PyGame here: https://bitbucket.org/pygame/pygame/downloads
 
-
+import pygame_menu
 import pygame
 import sys
 import time
@@ -28,6 +28,7 @@ import random
 import os
 from pygame.locals import *
 import glob
+
 #from SettingsMenu import SettingsMenu
 
 import math
@@ -35,8 +36,8 @@ from Ball import DVDCollision
 from Ball import Ball
 from Paddle import Paddle
 from fRect import fRect
-
-
+from PauseMenu import RESUMEGAME
+from PauseMenu import pauseMenu
 
 # In pygame, all colors are represented by RGB values in the format (R, G, B).
 white = [255, 255, 255]
@@ -181,7 +182,7 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
         if(pygame.mixer.get_busy() == False):
             if(THEME == 1):
                 SONG.play()
-            
+        
         for event in pygame.event.get():
             if(event.type == pygame.QUIT):
                 pygame.quit()
@@ -192,38 +193,23 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                 #screen.blit(DVD, (0,0))
                 #print(f"The string is: {random_DVD}")
                 #print("dvd collided")
-    
-
-            
-        """if(event.type == pygame.KEYDOWN):
                 
-                if(event.key == pygame.K_p):
-                    if(pause == False):
-                        menuu = SettingsMenu((440,280), 30)
-                            
-                    else:
-                        GameState(1)
-                    
-                    pass
-                if(pause == False):
-                        
-                        pause = True
-                        paused()
-                    else:
-                        pause = False
-                        paused()
-                if(Paused == True):
-                        ball.speed = ballSpeed
-                        paddle_speed = 1
-                        Paused = False
-                        print("Game is unpaused")
-                        print(ballSpeed)
-                    elif(Paused == False):
-                        ball.speed = (0,0)
-                        paddle_speed = 0
-                        Paused = True
-                        print("Game is paused")"""
-                                        
+            if(event.type == pygame.KEYDOWN):
+                
+                if(event.key == pygame.K_p and ball.speed != (0,0)):
+                    ballSpeed = ball.speed
+                    ball.speed = (0,0)
+                    paddleLeftSpeed = paddles[0].speed
+                    paddleRightSpeed = paddles[1].speed
+                    paddles[0].speed = 0
+                    paddles[1].speed = 0
+                    pauseMenu(screen.get_width(), screen.get_height())
+                
+            if(event.type == RESUMEGAME):
+                ball.speed = ballSpeed
+                paddles[0].speed = paddleLeftSpeed
+                paddles[1].speed = paddleRightSpeed
+
 
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
@@ -285,7 +271,7 @@ table_size = (440, 280)
 
 
 
-def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440, 280), fps = 60, theme = 1):
+def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440, 280), fps = 60, theme = 1, score = 11):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
     global THEME
@@ -298,7 +284,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
         ball_size = (40,50)
     else:
         ball_size = (95, 60)
-    global paddle_speed
+
     paddle_speed = 5
     max_angle = 45
 
@@ -309,7 +295,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
     global clock_rate
     clock_rate = fps
     turn_wait_rate = 3
-    score_to_win = 11
+    score_to_win = score
 
     screen = pygame.display.set_mode(table_size)
     pygame.display.set_caption('Pong')
@@ -349,7 +335,13 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
     pygame.display.flip()
     clock.tick(4)
 
+    print(f"The 0 paddle has AI is {paddles[0].isAI} and 1 paddle has AI is {paddles[1].isAI}")
     paddles[0].move_getter, paddles[1].move_getter = paddles[1].move_getter, paddles[0].move_getter
+
+    
+    #paddles[0], paddles[1] = paddles[1], paddles[0]
+    print(f"The 0 paddle has AI is {paddles[0].isAI} and 1 paddle has AI is {paddles[1].isAI}")
+
 
     game_loop(screen, paddles, ball, table_size,
               clock_rate, turn_wait_rate, score_to_win, 1)

@@ -28,7 +28,7 @@ import random
 import os
 from pygame.locals import *
 import glob
-
+import mysql.connector
 #from SettingsMenu import SettingsMenu
 
 import math
@@ -38,8 +38,10 @@ from Paddle import Paddle
 from fRect import fRect
 from PauseMenu import RESUMEGAME
 from PauseMenu import pauseMenu
-
+pygame.init()
 # In pygame, all colors are represented by RGB values in the format (R, G, B).
+name = ""
+flipped = False
 white = [255, 255, 255]
 black = [0, 0, 0]
 global GOAL_SOUND
@@ -247,9 +249,22 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
         clock.tick(clock_rate)
 
     font = pygame.font.Font(None, 64)
+    connection = mysql.connector.connect(host='localhost',
+                                        database='mydb',
+                                        user='root',
+                                        password='pingpong1!')
+    mycursor = connection.cursor()
+    cleanName = clean(name)
+    sql = f'UPDATE pongleaderboard SET numberOfWins = numberOfWins + 1 WHERE username = "{cleanName}"'
     if score[0] > score[1]:
+        if not paddles[0].isAI:
+            mycursor.execute(sql)
+            connection.commit()
         screen.blit(font.render("Left wins!", True, white, black), [24, 32])
     else:
+        if not paddles[1].isAI:
+            mycursor.execute(sql)
+            connection.commit()
         screen.blit(font.render("Right wins!", True, white, black), [24, 32])
     pygame.display.flip()
     clock.tick(2)
@@ -271,13 +286,49 @@ table_size = (440, 280)
 
 
 
-def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440, 280), fps = 60, theme = 1, score = 11):
+def not_exist(cleanname):
+    connection = mysql.connector.connect(host='localhost',
+                                        database='mydb',
+                                        user='root',
+                                        password='pingpong1!')
+    
+    mycursor = connection.cursor()
+    sql = f'SELECT * FROM pongLeaderboard WHERE userName = "{cleanname}"'
+    mycursor.execute(sql)
+    users = mycursor.fetchall()
+    if len(users) <= 0:
+        return True
+    else:
+        return False
+
+def insert(cleanname):
+    numwins = 0
+    print("CREATING")
+    connection = mysql.connector.connect(host='localhost',
+                                        database='mydb',
+                                        user='root',
+                                        password='pingpong1!')
+    
+    mycursor = connection.cursor()
+    sql = f'INSERT INTO pongLeaderboard (userName, numberOfWins) VALUES ("{cleanname}", "{numwins}")'
+    mycursor.execute(sql)
+    connection.commit()
+
+def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080, 720), fps = 60, theme = 1, score = 11):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
+    pygame.init()
+    file1 = open("name.txt","r+")
+    global name
+    name = file1.read()
+
+    cleanName = clean(name)
+    if not_exist(cleanName):
+        insert(cleanName)
     global THEME
     THEME = theme
     table_size = resolution
-    paddle_size = (10, 70)
+    paddle_size = (10, 150)
     if(theme == 1):
         ball_size = (15, 15)
     elif(theme == 2):
@@ -295,7 +346,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
     global clock_rate
     clock_rate = fps
     turn_wait_rate = 3
-    score_to_win = score
+    score_to_win = 1
 
     screen = pygame.display.set_mode(table_size)
     pygame.display.set_caption('Pong')
@@ -329,8 +380,8 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
     game_loop(screen, paddles, ball, table_size,
               clock_rate, turn_wait_rate, score_to_win, 1)
 
-    screen.blit(pygame.font.Font(None, 32).render(
-        str('SWITCHING SIDES'), True, white), [int(0.6*table_size[0])-8, 0])
+    # screen.blit(pygame.font.Font(None, 32).render(
+    #     str('SWITCHING SIDES'), True, white), [int(0.6*table_size[0])-8, 0])
 
     pygame.display.flip()
     clock.tick(4)
@@ -342,11 +393,10 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (440,
     #paddles[0], paddles[1] = paddles[1], paddles[0]
     print(f"The 0 paddle has AI is {paddles[0].isAI} and 1 paddle has AI is {paddles[1].isAI}")
 
+    # game_loop(screen, paddles, ball, table_size,
+    #           clock_rate, turn_wait_rate, score_to_win, 1)
 
-    game_loop(screen, paddles, ball, table_size,
-              clock_rate, turn_wait_rate, score_to_win, 1)
-
-    pygame.quit()
+    # pygame.quit()
 
 
     
@@ -357,6 +407,28 @@ if __name__ == '__main__':
     pygame.mixer.init()
     
     pygame.init()
-    
-    
 
+def clean(name):
+    answ = ""
+    for char in name:
+        if char.isalpha():
+            answ+=char
+    return answ
+
+# def test():
+#             file1 = open("name.txt","r+")
+#             name = file1.read()
+#             name = clean(name)
+
+#             connection = mysql.connector.connect(host='localhost',
+#                                         database='mydb',
+#                                         user='root',
+#                                         password='pingpong1!')
+#             mycursor = connection.cursor()
+#             # sql = "UPDATE pongleaderboard SET numberOfWins = numberOfWins + 1 WHERE username = 'Aakif' "
+#             sql = f'UPDATE pongleaderboard SET numberOfWins = numberOfWins + 1 WHERE username = "{name}"'
+#             val = name
+#             print(val)
+#             mycursor.execute(sql)
+#             connection.commit()
+# test()

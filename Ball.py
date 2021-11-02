@@ -172,7 +172,7 @@ class Ball:
 
 global DVDCollision
 DVDCollision = USEREVENT + 1
-my_event = pygame.event.Event(DVDCollision, message="BAD CAT")
+my_event = pygame.event.Event(DVDCollision, message="Collision")
 
 def detectCollision(self):
     global my_event

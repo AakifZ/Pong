@@ -6,6 +6,7 @@ from PONG import init_game
 from Gamemode import create_gamemode_window
 from SettingsMenu import createSettingsMenu
 
+
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
 font = pygame_menu.font.FONT_NEVIS
@@ -32,3 +33,8 @@ class menu():
         mainmenu.add.button("Quit", pygame_menu.events.EXIT)
 
         mainmenu.mainloop(surface)
+if __name__ == '__main__':
+        print("Directly")
+        menu()
+else:
+        print("Not Directly")

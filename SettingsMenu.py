@@ -1,4 +1,5 @@
 import pygame, pygame_menu
+from pygame.constants import SRCCOLORKEY
 from PONG import init_game
 
 #class SettingsMenu:
@@ -32,6 +33,7 @@ def createSettingsMenu( resolution = (1080,720), fps = 30):
     menu.add.selector("Screen Res: ", [("440x280",1), ("800x500",2), ("1200x750",3)], onchange=setResolution)
     menu.add.selector("FPS: ", [(" 30 ", 1), (" 60 ", 2), ("120", 3), ("1000", 4)], onchange=setFPS)
     menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3)], onchange=setTheme)
+    menu.add.selector('Score to Win: ',[('3',3),('7',7),('11',11),('15',15)], onchange=setScore)
     menu.add.button('Save', saveSettings)
     
     menu.mainloop(WINDOW) 
@@ -61,6 +63,17 @@ def setFPS(selected, value):
         fps = 120
     else:
         fps = 1000
+
+def setScore(selected,value):
+    global score 
+    if (value == 3):
+        score = 3
+    elif(value == 7):
+        score = 7
+    elif (value == 11):
+        score = 11
+    else:
+        score = 15
     
 
 def saveSettings():

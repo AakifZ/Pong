@@ -1,0 +1,47 @@
+.leaderboard-container {
+    width: 50%;
+    margin-left:25%;
+    margin-right:25%;
+    margin-top:0px;;
+}
+
+.parent-container h1 {
+    font-family: 'Press Start 2P', cursive;
+    text-align:center;
+    color:white;
+    padding-top:5%;
+    font-size:60px;
+    padding-bottom:5%;
+}
+
+.parent-container{
+    width:100%;
+    background-color:black;
+    height:100%;
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+}
+
+.t-body {
+    bottom:0;
+}
+
+td {
+    color:white;
+    border-bottom:none;
+    font-family: 'Press Start 2P', cursive;
+}
+
+th {
+    color:white;
+    font-family: 'Press Start 2P', cursive;
+    font-size:30px;
+}
+
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none;
+}

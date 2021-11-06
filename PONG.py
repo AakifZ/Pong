@@ -38,6 +38,9 @@ from Paddle import Paddle
 from fRect import fRect
 from PauseMenu import RESUMEGAME
 from PauseMenu import pauseMenu
+from PlayAgain import PLAYAGAIN
+from PlayAgain import playagain
+
 pygame.init()
 # In pygame, all colors are represented by RGB values in the format (R, G, B).
 name = ""
@@ -261,16 +264,25 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                                         password='pingpong1!')
     mycursor = connection.cursor()
     cleanName = clean(name)
+    
+    global Winner
+    Winner = cleanName
     sql = f'UPDATE pongleaderboard SET numberOfWins = numberOfWins + 1 WHERE username = "{cleanName}"'
     if score[0] > score[1]:
         if not paddles[0].isAI:
             mycursor.execute(sql)
             connection.commit()
+            Winner = "Left"
+        else: 
+            Winner = "AI"
         screen.blit(font.render("Left wins!", True, white, black), [24, 32])
+        
     else:
         if not paddles[1].isAI:
             mycursor.execute(sql)
             connection.commit()
+        else: 
+            Winner = "AI"
         screen.blit(font.render("Right wins!", True, white, black), [24, 32])
     pygame.display.flip()
     clock.tick(2)
@@ -399,6 +411,9 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
     #paddles[0], paddles[1] = paddles[1], paddles[0]
     print(f"The 0 paddle has AI is {paddles[0].isAI} and 1 paddle has AI is {paddles[1].isAI}")
 
+    global Winner
+    playagain(Winner, resolution[0], resolution[1])
+    
     # game_loop(screen, paddles, ball, table_size,
     #           clock_rate, turn_wait_rate, score_to_win, 1)
 

@@ -40,6 +40,7 @@ from PauseMenu import RESUMEGAME
 from PauseMenu import pauseMenu
 from PlayAgain import PLAYAGAIN
 from PlayAgain import playagain
+from PauseMenu import MAINMENU
 
 pygame.init()
 # In pygame, all colors are represented by RGB values in the format (R, G, B).
@@ -55,6 +56,8 @@ DVD = pygame.image.load("sprites/DVD/DVDWhite.png")
 DVD = pygame.transform.scale(DVD, (100, 50))
 # This clock is used to control the frame rate of the game
 clock = pygame.time.Clock()
+global Winner
+Winner = ""
 
 def theme(screen,ball, value):
     global GOAL_SOUND
@@ -193,7 +196,7 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
         if(pygame.mixer.get_busy() == False):
             if(THEME == 1):
                 SONG.play()
-        
+    
         for event in pygame.event.get():
             if(event.type == pygame.QUIT):
                 pygame.quit()
@@ -221,7 +224,8 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                 paddles[0].speed = paddleLeftSpeed
                 paddles[1].speed = paddleRightSpeed
 
-
+            if(event.type == MAINMENU):
+                return
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
         paddles[0].move(paddles[1].frect, ball.frect, table_size)
@@ -412,7 +416,8 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
     print(f"The 0 paddle has AI is {paddles[0].isAI} and 1 paddle has AI is {paddles[1].isAI}")
 
     global Winner
-    playagain(Winner, resolution[0], resolution[1])
+    if Winner:
+        playagain(Winner, resolution[0], resolution[1], gamemode, difficulty, resolution, fps, theme, score)
     
     # game_loop(screen, paddles, ball, table_size,
     #           clock_rate, turn_wait_rate, score_to_win, 1)

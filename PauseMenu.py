@@ -10,6 +10,9 @@ global RESUMEGAME
 RESUMEGAME = pygame.USEREVENT + 2
 resume_event = pygame.event.Event(RESUMEGAME, message="resumed")
 
+global MAINMENU
+MAINMENU = pygame.USEREVENT + 2
+mainmenuevent = pygame.event.Event(MAINMENU, message = "menu")
 def pauseMenu(width, height):
   
     customTheme = pygame_menu.Theme(background_color=(0,0,0,0), title_background_color=(0,255,200), 
@@ -29,8 +32,13 @@ def pauseMenu(width, height):
         pygame.event.post(resume_event)
 
 
+    def mainmenu():
+        pausemenu._enabled = False
+        global mainmenuevent
+        pygame.event.post(mainmenuevent)
+
     pausemenu.add.button("Resume", resume)
-    #pausemenu.add.button("Main Menu")
+    pausemenu.add.button("Menu", mainmenu)
     pausemenu.add.button("Quit", pausemenu._exit)
 
     

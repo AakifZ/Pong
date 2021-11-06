@@ -6,7 +6,7 @@ import os
 from pygame.locals import *
 
 import math
-
+import random
 from fRect import fRect
 class Ball:
 
@@ -34,12 +34,15 @@ class Ball:
         self.setThemeSound()
 
     
-
     def setThemeSound(self):
+        global SOUND_EFFECT
+        rand_num = random.randint(1,3)
         if(THEME == 1 or THEME == 3):
             pass
+        elif(THEME == 4):
+            SOUND_EFFECT = pygame.mixer.Sound(f'mathewpack/{rand_num}.wav')
+            SOUND_EFFECT.set_volume(1)
         elif(THEME == 2):
-            global SOUND_EFFECT
             SOUND_EFFECT = pygame.mixer.Sound("sounds/AUDIO_CORRECTED_SHAMONE.wav")
             SOUND_EFFECT.set_volume(0.2)
 
@@ -113,6 +116,9 @@ class Ball:
             if self.frect.intersect(paddle.frect):
                 detectCollision(self)
                 if(THEME == 2):
+                    SOUND_EFFECT.play()
+                elif(THEME == 4):
+                    self.setThemeSound()
                     SOUND_EFFECT.play()
                     if(pygame.mixer.get_busy() == False):
                         SOUND_EFFECT.play()

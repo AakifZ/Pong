@@ -142,7 +142,7 @@ class SettingsMenu():
         menu = pygame_menu.Menu("Settings", WINDOW.get_width(), WINDOW.get_height(), theme=customTheme)
         menu.add.selector("Screen Res: ", [("440x280",1), ("800x500",2), ("1200x750",3)], onchange=SettingsMenu.setResolution)
         menu.add.selector("FPS: ", [(" 30 ", 1), (" 60 ", 2), ("120", 3), ("1000", 4)], onchange=SettingsMenu.setFPS)
-        menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3)], onchange=SettingsMenu.setTheme)
+        menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3),("Mathew", 4)], onchange=SettingsMenu.setTheme)
         menu.add.selector('Score to Win: ',[('3',3),('7',7),('11',11),('15',15)], onchange=SettingsMenu.setScore)
         menu.add.button('Save', SettingsMenu.saveSettings)
         menu.add.button('Back to Menu', pygame_menu.events.BACK,

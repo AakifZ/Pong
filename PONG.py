@@ -57,6 +57,7 @@ DVD = pygame.transform.scale(DVD, (100, 50))
 clock = pygame.time.Clock()
 
 def theme(screen,ball, value):
+    global GOAL_SOUND
     if value == 1:
         pass
     elif value == 2:
@@ -64,9 +65,14 @@ def theme(screen,ball, value):
         MICHAEL = pygame.transform.scale(MICHAEL, (150,75))
         #placing my boy heehee right on the ball and subtracting by half the width and half the height to place the exact midpoint of heehee on the ball
         screen.blit(MICHAEL, (int(ball.get_center()[0]) - 75, int(ball.get_center()[1]) - 37.5))
-        global GOAL_SOUND
         GOAL_SOUND = pygame.mixer.Sound("sounds/HEEHEE4.mp3")
         GOAL_SOUND.set_volume(0.3)
+    elif value == 4:
+        MATHEW = pygame.image.load("mathewpack/mathew.png")
+        MATHEW = pygame.transform.scale(MATHEW, (275,150))
+        screen.blit(MATHEW, (int(ball.get_center()[0]) - 137.5, int(ball.get_center()[1]) - 75))
+        GOAL_SOUND = pygame.mixer.Sound("mathewpack/2.wav")
+        GOAL_SOUND.set_volume(1)
     else:
         pass
         #DVD = pygame.image.load("sprites/DVD/DVDWhite.png")
@@ -143,7 +149,7 @@ def check_point(score, ball, table_size):
     
     # Determines if the right paddle scored the point
     if ball.frect.pos[0]+ball.size[0]/2 < 0:
-        if(THEME == 2):
+        if(THEME == 2 or THEME == 4):
             GOAL_SOUND.play()
         score[1] += 1
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
@@ -151,7 +157,7 @@ def check_point(score, ball, table_size):
         return (ball, score)
     # Determines if the left paddle scored the point
     elif ball.frect.pos[0]+ball.size[0]/2 >= table_size[0]:
-        if(THEME == 2):
+        if(THEME == 2 or THEME == 4):
             GOAL_SOUND.play()
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
                     ball.wall_bounce, ball.dust_error, ball.init_speed_mag, THEME)
@@ -340,7 +346,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
     global THEME
     THEME = theme
     table_size = resolution
-    paddle_size = (10, 150)
+    paddle_size = (10, 110)
     if(theme == 1):
         ball_size = (15, 15)
     elif(theme == 2):

@@ -10,7 +10,7 @@ global PLAYAGAIN
 PLAYAGAIN = pygame.USEREVENT + 3
 again_event = pygame.event.Event(PLAYAGAIN, message="gameended")
 
-def playagain(winner, width, height):
+def playagain(winner, width, height, gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080, 720), fps = 60, theme = 1, score = 11):
   
     customTheme = pygame_menu.Theme(background_color=(0,0,0,0), title_background_color=(0,255,200), 
         title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
@@ -23,7 +23,7 @@ def playagain(winner, width, height):
     
     #RESUMEGAME = USEREVENT + 1
     def again():
-        PONG.init_game()
+        PONG.init_game(gamemode, difficulty, resolution, fps, theme, score)
         playagainmenu._enabled = False
 
     def mainMenu():
@@ -36,7 +36,7 @@ def playagain(winner, width, height):
         playagainmenu.add.label(f"{winner} wins!", font_size= 100, font_color=(0,255,0))
 
     playagainmenu.add.button("Play Again", again)
-    playagainmenu.add.button("Main Menu", mainMenu)
+    playagainmenu.add.button("Menu", mainMenu)
     playagainmenu.add.button("Quit", playagainmenu._exit)
 
     

@@ -32,12 +32,13 @@ class Menu():
         mainmenu = pygame_menu.Menu("Welcome to PONG!", 1080, 720,theme=mytheme)
         gamemode_sub_menu = Gamemode.create_gamemode_window()
         settings_sub_menu = SettingsMenu.createSettingsMenu()
+        leaderboard_sub_menu = LeaderboardMenu.draw_leaderboard_menu()
 
         mainmenu.add.text_input("Enter name: ", default= "Player", onchange=Menu.TextVal)
         mainmenu.add.button('Play',  init_game)
         mainmenu.add.button('Game Options', gamemode_sub_menu)
         mainmenu.add.button('Settings', settings_sub_menu)
-        mainmenu.add.button("Leaderboard")
+        mainmenu.add.button('Leaderboard', leaderboard_sub_menu)
         mainmenu.add.button("Quit", pygame_menu.events.EXIT)
 
         mainmenu.mainloop(surface)
@@ -210,4 +211,27 @@ class SettingsMenu():
         #print(f"The menu size is from get: {menu.get_window_size()}")
         pass
 
+import webbrowser
+class LeaderboardMenu():
+    def draw_leaderboard_menu():
+        myimage = pygame_menu.baseimage.BaseImage(
+            './assets/leaderboard_bg.jpg',
+            drawing_mode=pygame_menu.baseimage.IMAGE_MODE_FILL
+            )
+        mytheme = pygame_menu.themes.THEME_DARK
+        mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
+        mytheme.widget_alignment = pygame_menu.locals.ALIGN_CENTER
+        mytheme.title_font = pygame_menu.font.FONT_NEVIS
+        mytheme.background_color=(myimage)
+
+                
+        leaderboard_submenu = pygame_menu.Menu("Leaderboard", 1080, 720,theme=mytheme)
+        url = leaderboard_submenu.add.url("http://127.0.0.1:5000", "Click To Open Leaderboard", font_color=WHITE, font_size=60,cursor=pygame_menu.locals.CURSOR_HAND)
+        url.translate(0,-150)
+        quit = leaderboard_submenu.add.button("Quit", pygame_menu.events.EXIT, font_color=WHITE, font_size=64,cursor=pygame_menu.locals.CURSOR_HAND)
+        quit.translate(0,-150)
+        back = leaderboard_submenu.add.button('Back to Menu', pygame_menu.events.BACK,
+                                            cursor=pygame_menu.locals.CURSOR_HAND, font_color=WHITE, font_size=64)
+        back.translate(0,-150)
+        return leaderboard_submenu
 Menu.draw_main_menu()

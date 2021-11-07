@@ -10,11 +10,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   </head>
   <body>
     
     <div class="parent-container">
-        <h1>High Scores</h1>
+        <h1><img class="star-gif" src="https://gifimage.net/wp-content/uploads/2018/11/gif-mario-with-the-star-1.gif">High Scores<img class="star-gif" src="https://gifimage.net/wp-content/uploads/2018/11/gif-mario-with-the-star-1.gif"></h1>
         <div class="leaderboard-container">
             <table class="table leader-board table-borderless">
                   <tr>
@@ -23,15 +24,21 @@
                     <th scope="col">Wins</th>
                   </tr>
       
-
+                {% block content %}
                 {% for user in user_list %}
                   <tr>
+                    {% if user[2] == high_score %}
+                    <td class="first-place">{{user[0]}}</td>
+                    <td class="first-place">{{user[1]}}</td>
+                    <td class="first-place">{{user[2]}}</td>
+                    {% else %}
                     <td>{{user[0]}}</td>
                     <td>{{user[1]}}</td>
                     <td>{{user[2]}}</td>
+                    {% endif %}
                   </tr>
                 {% endfor %}
-
+                {% endblock content %}
               </table>
         </div>
     </div>

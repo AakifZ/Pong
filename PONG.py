@@ -220,11 +220,12 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                     pauseMenu(screen.get_width(), screen.get_height())
                 
             if(event.type == RESUMEGAME):
+                print("clicked resume in event")
                 ball.speed = ballSpeed
                 paddles[0].speed = paddleLeftSpeed
                 paddles[1].speed = paddleRightSpeed
 
-            if(event.type == MAINMENU):
+            elif(event.type == MAINMENU):
                 return
         old_score = score[:]
         ball, score = check_point(score, ball, table_size)
@@ -336,7 +337,7 @@ def insert(cleanname):
     mycursor.execute(sql)
     connection.commit()
 
-def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080, 720), fps = 60, theme = 1, score = 11):
+def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080, 720), fps = 60, theme = 1, score = 11, paddleSize = "Medium"):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
     pygame.init()
@@ -350,7 +351,15 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
     global THEME
     THEME = theme
     table_size = resolution
-    paddle_size = (10, 110)
+    #paddle_size = (10, 110)
+    if(paddleSize == "Small"):
+        paddle_size = (10, resolution[0] * 0.10) 
+    elif(paddleSize == "Medium"):
+        paddle_size = (10, resolution[0] * 0.15)
+    elif(paddleSize == "Large"):
+        paddle_size = (10, resolution[0] * 0.20)
+    else:
+        paddle_size = (10, resolution[0] * 0.01)
     if(theme == 1):
         ball_size = (15, 15)
     elif(theme == 2):
@@ -368,7 +377,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
     global clock_rate
     clock_rate = fps
     turn_wait_rate = 3
-    score_to_win = 1
+    score_to_win = score
 
     screen = pygame.display.set_mode(table_size)
     pygame.display.set_caption('Pong')
@@ -417,7 +426,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
 
     global Winner
     if Winner:
-        playagain(Winner, resolution[0], resolution[1], gamemode, difficulty, resolution, fps, theme, score)
+        playagain(Winner, resolution[0], resolution[1], gamemode, difficulty, resolution, fps, theme, score, paddleSize)
     
     # game_loop(screen, paddles, ball, table_size,
     #           clock_rate, turn_wait_rate, score_to_win, 1)

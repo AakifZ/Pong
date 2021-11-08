@@ -11,7 +11,7 @@ RESUMEGAME = pygame.USEREVENT + 2
 resume_event = pygame.event.Event(RESUMEGAME, message="resumed")
 
 global MAINMENU
-MAINMENU = pygame.USEREVENT + 2
+MAINMENU = pygame.USEREVENT + 4
 mainmenuevent = pygame.event.Event(MAINMENU, message = "menu")
 def pauseMenu(width, height):
   

@@ -377,7 +377,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
     global clock_rate
     clock_rate = fps
     turn_wait_rate = 3
-    score_to_win = 1
+    score_to_win = score
 
     screen = pygame.display.set_mode(table_size)
     pygame.display.set_caption('Pong')

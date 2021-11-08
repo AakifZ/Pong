@@ -76,6 +76,11 @@ def theme(screen,ball, value):
         screen.blit(MATHEW, (int(ball.get_center()[0]) - 137.5, int(ball.get_center()[1]) - 75))
         GOAL_SOUND = pygame.mixer.Sound("mathewpack/2.wav")
         GOAL_SOUND.set_volume(1)
+    elif value == 5:
+        CORNELY = pygame.image.load("sprites/Cornely.png")
+        CORNELY = pygame.transform.scale(CORNELY, (100, 100))
+        screen.blit(CORNELY, (int(ball.get_center()[0] - 30), int(ball.get_center()[1]-50)))
+        GOAL_SOUND = pygame.mixer.Sound("sounds/Milk.wav")
     else:
         pass
         #DVD = pygame.image.load("sprites/DVD/DVDWhite.png")
@@ -114,8 +119,8 @@ def render(screen, paddles, ball, score, table_size):
 
     
     
-    if(THEME == 1):
-        pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(
+    #if(THEME == 1):
+    pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(
         ball.get_center()[1])),  int(ball.frect.size[0]/2), 0)
     
     theme(screen, ball, THEME)
@@ -360,9 +365,13 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
         paddle_size = (10, resolution[0] * 0.20)
     else:
         paddle_size = (10, resolution[0] * 0.01)
+
+    
     if(theme == 1):
         ball_size = (15, 15)
     elif(theme == 2):
+        ball_size = (40,50)
+    elif(theme == 5):
         ball_size = (40,50)
     else:
         ball_size = (95, 60)

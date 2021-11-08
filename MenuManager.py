@@ -87,7 +87,7 @@ class Gamemode():
                     widget_padding=20,
                     widget_margin=(10,30))
         bg_img = pygame_menu.baseimage.BaseImage(
-        image_path='assets\menu_background_1080x720.jpg',
+        image_path='assets/menu_background_1080x720.jpg',
         drawing_mode=pygame_menu.baseimage.IMAGE_MODE_REPEAT_XY
         )
 
@@ -119,13 +119,13 @@ global theme
 global score
 global paddleSize
 score = 3
-resolution = (440, 280)
-fps = 30
+resolution = (1080, 720)
+fps = 60
 theme = 1
 paddleSize = "Small"
 
 class SettingsMenu():
-    def createSettingsMenu( resolution = (1080,720), fps = 30):
+    def createSettingsMenu( resolution = (1080,720), fps = 60):
         
         pygame.display.set_caption("Settings")
         WINDOW = pygame.display.set_mode(resolution)
@@ -143,8 +143,8 @@ class SettingsMenu():
 
         global menu
         menu = pygame_menu.Menu("Settings", WINDOW.get_width(), WINDOW.get_height(), theme=customTheme)
-        menu.add.selector("Screen Res: ", [("440x280",1), ("800x500",2), ("1200x750",3)], onchange=SettingsMenu.setResolution)
-        menu.add.selector("FPS: ", [(" 30 ", 1), (" 60 ", 2), ("120", 3), ("1000", 4)], onchange=SettingsMenu.setFPS)
+        menu.add.selector("Screen Res: ", [("1080x720",1),("800x500",2),("440x280",3)], onchange=SettingsMenu.setResolution)
+        menu.add.selector("FPS: ", [(" 60 ", 1), (" 120 ", 2), ("30", 3), ("1000", 4)], onchange=SettingsMenu.setFPS)
         menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3),("Mathew", 4)], onchange=SettingsMenu.setTheme)
         menu.add.selector('Score to Win: ',[('3',3),('7',7),('11',11),('15',15)], onchange=SettingsMenu.setScore)
         menu.add.selector("Paddle Size: ", [("Small", "Small"), ("Medium", "Medium"), ("Large", "Large"), ("bruh wha?", "wha?")], onchange=SettingsMenu.setPaddleSize)
@@ -165,20 +165,20 @@ class SettingsMenu():
     def setResolution(selected, value):
         global resolution
         if(value == 1):
-            resolution = (440, 280)
+            resolution = (1080, 720)
         elif(value == 2):
             resolution = (800, 500)
         else:
-            resolution = (1200, 750)
+            resolution = (440, 280)
         
     def setFPS(selected, value):
         global fps
         if(value == 1):
-            fps = 30
-        elif(value == 2):
             fps = 60
-        elif(value == 3):
+        elif(value == 2):
             fps = 120
+        elif(value == 3):
+            fps = 30
         else:
             fps = 1000
 

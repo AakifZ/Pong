@@ -211,6 +211,7 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
             if(event.type == pygame.KEYDOWN):
                 
                 if(event.key == pygame.K_p and ball.speed != (0,0)):
+                    pygame.mixer.pause()
                     ballSpeed = ball.speed
                     ball.speed = (0,0)
                     paddleLeftSpeed = paddles[0].speed
@@ -219,11 +220,13 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                     paddles[1].speed = 0
                     pauseMenu(screen.get_width(), screen.get_height())
                 
+                
             if(event.type == RESUMEGAME):
                 print("clicked resume in event")
                 ball.speed = ballSpeed
                 paddles[0].speed = paddleLeftSpeed
                 paddles[1].speed = paddleRightSpeed
+                pygame.mixer.unpause()
 
             elif(event.type == MAINMENU):
                 return

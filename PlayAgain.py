@@ -33,6 +33,12 @@ def playagain(winner, width, height, gamemode = 'singleplayer', difficulty = 'ha
 
     def mainMenu():
         playagainmenu._enabled = False
+    
+    def exit():
+        file = open("name.txt","r+")
+        file.truncate(0)
+        file.close()
+        playagainmenu._exit() 
         
     fontsize = int(resolution[0] * 0.15)
     if(resolution[0] < 500):
@@ -48,7 +54,7 @@ def playagain(winner, width, height, gamemode = 'singleplayer', difficulty = 'ha
 
     playagainmenu.add.button("Play Again", again)
     playagainmenu.add.button("Menu", mainMenu)
-    playagainmenu.add.button("Quit", playagainmenu._exit)
+    playagainmenu.add.button("Quit", exit)
 
     
 

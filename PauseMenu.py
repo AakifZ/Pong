@@ -37,9 +37,15 @@ def pauseMenu(width, height):
         global mainmenuevent
         pygame.event.post(mainmenuevent)
 
+    def exit():
+        file = open("name.txt","r+")
+        file.truncate(0)
+        file.close()
+        pausemenu._exit() 
+
     pausemenu.add.button("Resume", resume)
     pausemenu.add.button("Menu", mainmenu)
-    pausemenu.add.button("Quit", pausemenu._exit)
+    pausemenu.add.button("Quit", exit)
 
     
 

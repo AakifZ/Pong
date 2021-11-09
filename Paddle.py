@@ -71,3 +71,6 @@ class Paddle:
             return self.move_getter(self.frect.copy(), enemy_frect.copy(), ball_frect.copy(), tuple(table_size))
         else:
             return self.move_getter()
+
+    def get_center(self):
+        return (self.frect.pos[0] + .5*self.frect.size[0], self.frect.pos[1] + .5*self.frect.size[1])

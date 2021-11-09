@@ -35,6 +35,8 @@ class Menu():
         leaderboard_sub_menu = LeaderboardMenu.draw_leaderboard_menu()
 
         mainmenu.add.text_input("Enter name: ", default= "Player", onchange=Menu.TextVal)
+        mainmenu.add.text_input("Enter name: ", default= "Player2", onchange=Menu.TextVal2)
+
         mainmenu.add.button('Play',  init_game)
         mainmenu.add.button('Game Options', gamemode_sub_menu)
         mainmenu.add.button('Settings', settings_sub_menu)
@@ -45,9 +47,14 @@ class Menu():
 
 
     def TextVal(name): 
+        print(name)
         file1 = open("name.txt","w")
         file1.write(name + " \n")
 
+    def TextVal2(name2): 
+        print(name2)
+        file2 = open("name2.txt","w")
+        file2.write(name2 + " \n")
 class Gamemode():
 
     def __init__(self) -> None:
@@ -118,6 +125,8 @@ global fps
 global theme
 global score
 global paddleSize
+
+
 score = 3
 resolution = (1080, 720)
 fps = 60
@@ -145,7 +154,7 @@ class SettingsMenu():
         menu = pygame_menu.Menu("Settings", WINDOW.get_width(), WINDOW.get_height(), theme=customTheme)
         menu.add.selector("Screen Res: ", [("1080x720",1),("800x500",2),("440x280",3)], onchange=SettingsMenu.setResolution)
         menu.add.selector("FPS: ", [(" 60 ", 1), (" 120 ", 2), ("30", 3), ("1000", 4)], onchange=SettingsMenu.setFPS)
-        menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3),("Mathew", 4), ("Lil Cornely", 5)], onchange=SettingsMenu.setTheme)
+        menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3),("Matthew", 4), ("Lil Cornely", 5)], onchange=SettingsMenu.setTheme)
         menu.add.selector('Score to Win: ',[('3',3),('7',7),('11',11),('15',15)], onchange=SettingsMenu.setScore)
         menu.add.selector("Paddle Size: ", [("Small", "Small"), ("Medium", "Medium"), ("Large", "Large"), ("bruh wha?", "wha?")], onchange=SettingsMenu.setPaddleSize)
         menu.add.button('Save', SettingsMenu.saveSettings)

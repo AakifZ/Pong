@@ -59,6 +59,7 @@ clock = pygame.time.Clock()
 global Winner
 Winner = ""
 
+
 def theme(screen,ball, value, paddles):
     global GOAL_SOUND
     if value == 1:
@@ -288,25 +289,35 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                                         password='pingpong1!')
     mycursor = connection.cursor()
     cleanName = clean(name)
+    cleanName2 = clean(name2)
     
     global Winner
     Winner = cleanName
-    sql = f'UPDATE pongleaderboard SET numberOfWins = numberOfWins + 1 WHERE username = "{cleanName}"'
+
+    sql1 = f'UPDATE pongleaderboard SET numberOfWins = numberOfWins + 1 WHERE username = "{cleanName}"'
+    sql2 = f'UPDATE pongleaderboard SET numberOfWins = numberOfWins + 1 WHERE username = "{cleanName2}"'
+
     if score[0] > score[1]:
         if not paddles[0].isAI:
-            mycursor.execute(sql)
+            mycursor.execute(sql2)
             connection.commit()
-            Winner = "Left"
+            Winner = cleanName2
+    
         else: 
             Winner = "AI"
+    
+            
         screen.blit(font.render("Left wins!", True, white, black), [24, 32])
         
     else:
+        
         if not paddles[1].isAI:
-            mycursor.execute(sql)
+            mycursor.execute(sql1)
             connection.commit()
+            Winner = cleanName
         else: 
             Winner = "AI"
+     
         screen.blit(font.render("Right wins!", True, white, black), [24, 32])
     pygame.display.flip()
     clock.tick(2)
@@ -364,9 +375,20 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (1080
     global name
     name = file1.read()
 
+    file2 = open("name2.txt","r+")
+    global name2
+    name2 = file2.read()
+
     cleanName = clean(name)
+    cleanName2 = clean(name2)
+
     if not_exist(cleanName):
         insert(cleanName)
+
+           
+    if not_exist(cleanName2):
+        insert(cleanName2)
+        
     global THEME
     THEME = theme
     table_size = resolution

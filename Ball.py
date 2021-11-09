@@ -45,6 +45,14 @@ class Ball:
         elif(THEME == 2):
             SOUND_EFFECT = pygame.mixer.Sound("sounds/AUDIO_CORRECTED_SHAMONE.wav")
             SOUND_EFFECT.set_volume(0.2)
+        elif(THEME == 5):
+            global SOUND_EFFECT_LEFT 
+            SOUND_EFFECT_LEFT = pygame.mixer.Sound("sounds/nomnomnom.wav")
+            SOUND_EFFECT_LEFT.set_volume(0.5)
+            global SOUND_EFFECT_RIGHT
+            SOUND_EFFECT_RIGHT = pygame.mixer.Sound("sounds/MILKLOWERED.wav")
+            SOUND_EFFECT_RIGHT.set_volume(0.5)
+
 
     def get_center(self):
         """Finds the (x,y) coordinates for the middle of the ball
@@ -122,7 +130,15 @@ class Ball:
                     SOUND_EFFECT.play()
                     if(pygame.mixer.get_busy() == False):
                         SOUND_EFFECT.play()
-                
+                elif(THEME == 5):
+                    global SOUND_EFFECT_LEFT
+                    global SOUND_EFFECT_RIGHT
+                    self.setThemeSound()
+                    if (paddle == paddles[0]):
+                        SOUND_EFFECT_LEFT.play()
+                    elif(paddle == paddles[1]):
+                        SOUND_EFFECT_RIGHT.play()
+        
                 if (paddle.facing == 1 and self.get_center()[0] < paddle.frect.pos[0] + paddle.frect.size[0]/2) or \
                         (paddle.facing == 0 and self.get_center()[0] > paddle.frect.pos[0] + paddle.frect.size[0]/2):
                     continue

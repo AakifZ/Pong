@@ -59,7 +59,7 @@ clock = pygame.time.Clock()
 global Winner
 Winner = ""
 
-def theme(screen,ball, value):
+def theme(screen,ball, value, paddles):
     global GOAL_SOUND
     if value == 1:
         pass
@@ -78,9 +78,19 @@ def theme(screen,ball, value):
         GOAL_SOUND.set_volume(1)
     elif value == 5:
         CORNELY = pygame.image.load("sprites/Cornely.png")
-        CORNELY = pygame.transform.scale(CORNELY, (100, 100))
-        screen.blit(CORNELY, (int(ball.get_center()[0] - 30), int(ball.get_center()[1]-50)))
+        CORNELY = pygame.transform.scale(CORNELY, (75, 75))
+        screen.blit(CORNELY, (int(ball.get_center()[0] - 37.5), int(ball.get_center()[1] - 37.5)))
+
+        MILKBOTTLE = pygame.image.load("sprites/MILKBOTTLE.png")
+        MILKBOTTLE = pygame.transform.scale(MILKBOTTLE, (28, 80))
+        screen.blit(MILKBOTTLE, ((int(paddles[1].get_center()[0]) -14), (int(paddles[1].get_center()[1])-40)) )
+
+        DONUT = pygame.image.load("sprites/PAINTDONUT.png")
+        DONUT = pygame.transform.scale(DONUT, (28, 80))
+        screen.blit(DONUT, ((int(paddles[0].get_center()[0]) - 14), (int(paddles[0].get_center()[1])-40)))
+
         GOAL_SOUND = pygame.mixer.Sound("sounds/Milk.wav")
+        GOAL_SOUND.set_volume(0.5)
     else:
         pass
         #DVD = pygame.image.load("sprites/DVD/DVDWhite.png")
@@ -119,11 +129,11 @@ def render(screen, paddles, ball, score, table_size):
 
     
     
-    #if(THEME == 1):
-    pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(
-        ball.get_center()[1])),  int(ball.frect.size[0]/2), 0)
+    if(THEME == 1):
+        pygame.draw.circle(screen, white, (int(ball.get_center()[0]), int(
+            ball.get_center()[1])),  int(ball.frect.size[0]/2), 0)
     
-    theme(screen, ball, THEME)
+    theme(screen, ball, THEME, paddles)
     
     pygame.draw.line(screen, white, [screen.get_width(
     )/2, 0], [screen.get_width()/2, screen.get_height()])
@@ -157,7 +167,7 @@ def check_point(score, ball, table_size):
     
     # Determines if the right paddle scored the point
     if ball.frect.pos[0]+ball.size[0]/2 < 0:
-        if(THEME == 2 or THEME == 4):
+        if(THEME == 2 or THEME == 4 or THEME == 5):
             GOAL_SOUND.play()
         score[1] += 1
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
@@ -165,7 +175,7 @@ def check_point(score, ball, table_size):
         return (ball, score)
     # Determines if the left paddle scored the point
     elif ball.frect.pos[0]+ball.size[0]/2 >= table_size[0]:
-        if(THEME == 2 or THEME == 4):
+        if(THEME == 2 or THEME == 4 or THEME == 5):
             GOAL_SOUND.play()
         ball = Ball(table_size, ball.size, ball.paddle_bounce,
                     ball.wall_bounce, ball.dust_error, ball.init_speed_mag, THEME)
@@ -372,7 +382,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080
     elif(theme == 2):
         ball_size = (40,50)
     elif(theme == 5):
-        ball_size = (40,50)
+        ball_size = (65,70)
     else:
         ball_size = (95, 60)
 

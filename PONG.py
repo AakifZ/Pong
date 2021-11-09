@@ -124,8 +124,9 @@ def render(screen, paddles, ball, score, table_size):
     """
     screen.fill(black)
     
-    pygame.draw.rect(screen, white, paddles[0].frect.get_rect())
-    pygame.draw.rect(screen, white, paddles[1].frect.get_rect())
+    if(THEME != 5):
+        pygame.draw.rect(screen, white, paddles[0].frect.get_rect())
+        pygame.draw.rect(screen, white, paddles[1].frect.get_rect())
 
     
     

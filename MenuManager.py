@@ -32,12 +32,13 @@ class Menu():
         mainmenu = pygame_menu.Menu("Welcome to PONG!", 1080, 720,theme=mytheme)
         gamemode_sub_menu = Gamemode.create_gamemode_window()
         settings_sub_menu = SettingsMenu.createSettingsMenu()
+        leaderboard_sub_menu = LeaderboardMenu.draw_leaderboard_menu()
 
         mainmenu.add.text_input("Enter name: ", default= "Player", onchange=Menu.TextVal)
         mainmenu.add.button('Play',  init_game)
         mainmenu.add.button('Game Options', gamemode_sub_menu)
         mainmenu.add.button('Settings', settings_sub_menu)
-        mainmenu.add.button("Leaderboard")
+        mainmenu.add.button('Leaderboard', leaderboard_sub_menu)
         mainmenu.add.button("Quit", pygame_menu.events.EXIT)
 
         mainmenu.mainloop(surface)
@@ -86,7 +87,7 @@ class Gamemode():
                     widget_padding=20,
                     widget_margin=(10,30))
         bg_img = pygame_menu.baseimage.BaseImage(
-        image_path='assets\menu_background_1080x720.jpg',
+        image_path='assets/menu_background_1080x720.jpg',
         drawing_mode=pygame_menu.baseimage.IMAGE_MODE_REPEAT_XY
         )
 
@@ -118,13 +119,13 @@ global theme
 global score
 global paddleSize
 score = 3
-resolution = (440, 280)
-fps = 30
+resolution = (1080, 720)
+fps = 60
 theme = 1
 paddleSize = "Small"
 
 class SettingsMenu():
-    def createSettingsMenu( resolution = (1080,720), fps = 30):
+    def createSettingsMenu( resolution = (1080,720), fps = 60):
         
         pygame.display.set_caption("Settings")
         WINDOW = pygame.display.set_mode(resolution)
@@ -142,8 +143,8 @@ class SettingsMenu():
 
         global menu
         menu = pygame_menu.Menu("Settings", WINDOW.get_width(), WINDOW.get_height(), theme=customTheme)
-        menu.add.selector("Screen Res: ", [("440x280",1), ("800x500",2), ("1200x750",3)], onchange=SettingsMenu.setResolution)
-        menu.add.selector("FPS: ", [(" 30 ", 1), (" 60 ", 2), ("120", 3), ("1000", 4)], onchange=SettingsMenu.setFPS)
+        menu.add.selector("Screen Res: ", [("1080x720",1),("800x500",2),("440x280",3)], onchange=SettingsMenu.setResolution)
+        menu.add.selector("FPS: ", [(" 60 ", 1), (" 120 ", 2), ("30", 3), ("1000", 4)], onchange=SettingsMenu.setFPS)
         menu.add.selector("Theme: ", [("Original",1), ("Mikey", 2), ("Nostalgia", 3),("Mathew", 4), ("Lil Cornely", 5)], onchange=SettingsMenu.setTheme)
         menu.add.selector('Score to Win: ',[('3',3),('7',7),('11',11),('15',15)], onchange=SettingsMenu.setScore)
         menu.add.selector("Paddle Size: ", [("Small", "Small"), ("Medium", "Medium"), ("Large", "Large"), ("bruh wha?", "wha?")], onchange=SettingsMenu.setPaddleSize)
@@ -164,20 +165,20 @@ class SettingsMenu():
     def setResolution(selected, value):
         global resolution
         if(value == 1):
-            resolution = (440, 280)
+            resolution = (1080, 720)
         elif(value == 2):
             resolution = (800, 500)
         else:
-            resolution = (1200, 750)
+            resolution = (440, 280)
         
     def setFPS(selected, value):
         global fps
         if(value == 1):
-            fps = 30
-        elif(value == 2):
             fps = 60
-        elif(value == 3):
+        elif(value == 2):
             fps = 120
+        elif(value == 3):
+            fps = 30
         else:
             fps = 1000
 
@@ -216,4 +217,27 @@ class SettingsMenu():
         #print(f"The menu size is from get: {menu.get_window_size()}")
         pass
 
+import webbrowser
+class LeaderboardMenu():
+    def draw_leaderboard_menu():
+        myimage = pygame_menu.baseimage.BaseImage(
+            './assets/leaderboard_bg.jpg',
+            drawing_mode=pygame_menu.baseimage.IMAGE_MODE_FILL
+            )
+        mytheme = pygame_menu.themes.THEME_DARK
+        mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
+        mytheme.widget_alignment = pygame_menu.locals.ALIGN_CENTER
+        mytheme.title_font = pygame_menu.font.FONT_NEVIS
+        mytheme.background_color=(myimage)
+
+                
+        leaderboard_submenu = pygame_menu.Menu("Leaderboard", 1080, 720,theme=mytheme)
+        url = leaderboard_submenu.add.url("http://127.0.0.1:5000", "Click To Open Leaderboard", font_color=WHITE, font_size=60,cursor=pygame_menu.locals.CURSOR_HAND)
+        url.translate(0,-150)
+        quit = leaderboard_submenu.add.button("Quit", pygame_menu.events.EXIT, font_color=WHITE, font_size=64,cursor=pygame_menu.locals.CURSOR_HAND)
+        quit.translate(0,-150)
+        back = leaderboard_submenu.add.button('Back to Menu', pygame_menu.events.BACK,
+                                            cursor=pygame_menu.locals.CURSOR_HAND, font_color=WHITE, font_size=64)
+        back.translate(0,-150)
+        return leaderboard_submenu
 Menu.draw_main_menu()

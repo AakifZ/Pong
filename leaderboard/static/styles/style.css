@@ -9,16 +9,20 @@
     font-family: 'Press Start 2P', cursive;
     text-align:center;
     color:white;
-    padding-top:5%;
+    padding-top:2%;
     font-size:60px;
-    padding-bottom:5%;
+    padding-bottom:2%;
 }
 
 .parent-container{
     width:100%;
     background-color:black;
-    height:100%;
+    height:fit-content;
     position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+}
+
+html {
+    background-color: black;
 }
 
 .t-body {
@@ -44,4 +48,13 @@ th {
 .table-borderless > thead > tr > td,
 .table-borderless > thead > tr > th {
     border: none;
+}
+
+.first-place {
+    color:#f6e703
+}
+
+.star-gif {
+    height:150px;
+    width:auto;
 }

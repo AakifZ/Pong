@@ -226,6 +226,7 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
             if(event.type == pygame.KEYDOWN):
                 
                 if(event.key == pygame.K_p and ball.speed != (0,0)):
+                    pygame.mixer.pause()
                     ballSpeed = ball.speed
                     ball.speed = (0,0)
                     paddleLeftSpeed = paddles[0].speed
@@ -234,11 +235,13 @@ def game_loop(screen, paddles, ball, table_size, clock_rate, turn_wait_rate, sco
                     paddles[1].speed = 0
                     pauseMenu(screen.get_width(), screen.get_height())
                 
+                
             if(event.type == RESUMEGAME):
                 print("clicked resume in event")
                 ball.speed = ballSpeed
                 paddles[0].speed = paddleLeftSpeed
                 paddles[1].speed = paddleRightSpeed
+                pygame.mixer.unpause()
 
             elif(event.type == MAINMENU):
                 return
@@ -352,7 +355,7 @@ def insert(cleanname):
     mycursor.execute(sql)
     connection.commit()
 
-def init_game(gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080, 720), fps = 60, theme = 1, score = 11, paddleSize = "Medium"):
+def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (1080, 720), fps = 60, theme = 1, score = 3, paddleSize = "Medium"):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
     pygame.init()

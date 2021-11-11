@@ -36,7 +36,7 @@ class Ball:
     
     def setThemeSound(self):
         global SOUND_EFFECT
-        rand_num = random.randint(1,5)
+        rand_num = random.randint(1,4)
         if(THEME == 1 or THEME == 3):
             pass
         elif(THEME == 4):

@@ -10,7 +10,7 @@ global PLAYAGAIN
 PLAYAGAIN = pygame.USEREVENT + 3
 again_event = pygame.event.Event(PLAYAGAIN, message="gameended")
 
-def playagain(winner, width, height, gamemode = 'singleplayer', difficulty = 'hard', resolution = (1080, 720), fps = 60, theme = 1, score = 11, paddle_size = "Medium"):
+def playagain(winner, width, height, gamemode = 'singleplayer', difficulty_left = 'hard', difficulty_right='hard', resolution = (1080, 720), fps = 60, theme = 1, score = 11, paddle_size = "Medium"):
   
     customTheme = pygame_menu.Theme(background_color=(0,0,0,0), title_background_color=(0,255,200), 
         title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
@@ -28,7 +28,7 @@ def playagain(winner, width, height, gamemode = 'singleplayer', difficulty = 'ha
     
     #RESUMEGAME = USEREVENT + 1
     def again():
-        PONG.init_game(gamemode, difficulty, resolution, fps, theme, score, paddle_size)
+        PONG.init_game(gamemode, difficulty_left, difficulty_right, resolution, fps, theme, score, paddle_size)
         playagainmenu._enabled = False
 
     def mainMenu():

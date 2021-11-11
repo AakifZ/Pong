@@ -367,7 +367,7 @@ def insert(cleanname):
     mycursor.execute(sql)
     connection.commit()
 
-def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (1080, 720), fps = 60, theme = 1, score = 3, paddleSize = "Medium"):
+def init_game(gamemode = 'singleplayer', difficulty_left = 'easy', difficulty_right ='medium', resolution = (1080, 720), fps = 60, theme = 1, score = 3, paddleSize = "Medium"):
     """Sets up the game by initializing the game window, paddles, and the ball. Sets default values for the paddle speed, ball size, paddle size, and FPS.
     """
     pygame.init()
@@ -436,18 +436,18 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (1080
     paddles = []
     if gamemode == "singleplayer":
         # player vs computer
-        paddles = [AI.get_paddle_difficulty(difficulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(difficulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+        paddles = [AI.get_paddle_difficulty(difficulty_left, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty('Hard',(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
         paddles[0].move_getter = AI.get_move_ai
         paddles[1].move_getter = AI.get_move_player_right
 
     elif gamemode == "multiplayer":
         # player vs player
-        paddles = [AI.get_paddle_difficulty(difficulty, (20, table_size[1]/2), paddle_size, max_angle, 1, False),AI.get_paddle_difficulty(difficulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
+        paddles = [AI.get_paddle_difficulty('Hard', (20, table_size[1]/2), paddle_size, max_angle, 1, False),AI.get_paddle_difficulty('Hard',(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, False)]
         paddles[0].move_getter = AI.get_move_player_left
         paddles[1].move_getter = AI.get_move_player_right
     else:
         # computer vs computer
-        paddles = [AI.get_paddle_difficulty(difficulty, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(difficulty,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, True)]
+        paddles = [AI.get_paddle_difficulty(difficulty_left, (20, table_size[1]/2), paddle_size, max_angle, 1, True),AI.get_paddle_difficulty(difficulty_right,(table_size[0]-20, table_size[1]/2), paddle_size, max_angle, 0, True)]
         paddles[0].move_getter = AI.get_move_ai
         paddles[1].move_getter = AI.get_move_ai
     ball = Ball(table_size, ball_size, paddle_bounce,
@@ -471,7 +471,7 @@ def init_game(gamemode = 'singleplayer', difficulty = 'easy', resolution = (1080
 
     global Winner
     if Winner:
-        playagain(Winner, resolution[0], resolution[1], gamemode, difficulty, resolution, fps, theme, score, paddleSize)
+        playagain(Winner, resolution[0], resolution[1], gamemode, difficulty_left, difficulty_right, resolution, fps, theme, score, paddleSize)
     
     # game_loop(screen, paddles, ball, table_size,
     #           clock_rate, turn_wait_rate, score_to_win, 1)

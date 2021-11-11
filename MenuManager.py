@@ -10,7 +10,8 @@ surface = pygame.display.set_mode((1080, 720))
 font = pygame_menu.font.FONT_NEVIS
 globalName = ""
 game_mode = "singleplayer"
-game_diff = "easy"
+game_diff_left = "easy"
+game_diff_right = "medium"
 LIGHT_BLUE = [17, 156, 216]
 DARK_BLUE = [9, 78, 107]
 WHITE = [255, 255, 255]
@@ -65,15 +66,15 @@ class Gamemode():
         global gamememode_menu
         gamememode_menu = pygame_menu.Menu('Gamemode', gamemode_window_size[0], gamemode_window_size[1], theme=Gamemode.custom_theme())
         global choose_gamemode_label
-        choose_gamemode_label = gamememode_menu.add.label('Choose Gamemode Below', max_char=-1, font_size=45, background_color=DARK_BLUE, font_color=WHITE)
+        choose_gamemode_label = gamememode_menu.add.label('Choose Gamemode Below', 'choose_id', max_char=-1, font_size=45, background_color=DARK_BLUE, font_color=WHITE)
         global choose_gamemode_selector
-        choose_gamemode_selector = gamememode_menu.add.selector('Gamemode:', [('SinglePlayer', 1), ('MultiPlayer', 2), ('Computer vs Computer', 3)], onchange=Gamemode.set_gamemode, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30)
+        choose_gamemode_selector = gamememode_menu.add.selector('Gamemode:', [('SinglePlayer', 1), ('MultiPlayer', 2), ('Computer vs Computer', 3)], selector_id='select_id', onchange=Gamemode.set_gamemode, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30)
         global next_screen_btn_gamemode
-        next_screen_btn_gamemode = gamememode_menu.add.button('Choose Difficulty', Gamemode.update_display, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30)
+        next_screen_btn_gamemode = gamememode_menu.add.button('Next', Gamemode.update_display, button_id='next_id', background_color=LIGHT_BLUE, font_color=WHITE, font_size=35)
         global first_gamemode_quit_btn
-        first_gamemode_quit_btn = gamememode_menu.add.button('Quit', pygame_menu.events.EXIT, background_color=DARK_BLUE, font_color=WHITE, font_size=25)
+        first_gamemode_quit_btn = gamememode_menu.add.button('Quit', pygame_menu.events.EXIT, button_id='quit_id', background_color=DARK_BLUE, font_color=WHITE, font_size=25)
         global first_gamemode_back_btn
-        first_gamemode_back_btn = gamememode_menu.add.button('Back to Menu', pygame_menu.events.BACK,
+        first_gamemode_back_btn = gamememode_menu.add.button('Back to Menu', pygame_menu.events.BACK,button_id='back_id',
                                             cursor=pygame_menu.locals.CURSOR_HAND)
         return gamememode_menu
 
@@ -81,9 +82,13 @@ class Gamemode():
         global game_mode
         game_mode = selected_item[0][0].lower()
 
-    def choose_difficulty(selected_item, pos):
-        global game_diff
-        game_diff = selected_item[0][0].lower()
+    def choose_difficulty_left(selected_item, pos):
+        global game_diff_left
+        game_diff_left = selected_item[0][0].lower()
+
+    def choose_difficulty_right(selected_item, pos):
+        global game_diff_right
+        game_diff_right = selected_item[0][0].lower()
 
     from pygame_menu import Theme
 
@@ -102,23 +107,79 @@ class Gamemode():
         return mytheme
 
     def start_game():
-        print(game_diff)
-        init_game(game_mode, game_diff)
+        Gamemode.reset_ui()
+        init_game(game_mode, game_diff_left, game_diff_right, fps = 80)
 
     def update_display():
-        gamememode_menu.remove_widget(choose_gamemode_label)
-        gamememode_menu.remove_widget(choose_gamemode_selector)
-        gamememode_menu.remove_widget(next_screen_btn_gamemode)
-        gamememode_menu.remove_widget(first_gamemode_back_btn)
-        gamememode_menu.remove_widget(first_gamemode_quit_btn)
-        gamememode_menu.add.label('Choose Difficulty Below', max_char=-1, font_size=45, background_color=DARK_BLUE, font_color=WHITE)
-        gamememode_menu.add.selector('Left Paddle Difficulty:', [('Easy', 1), ('Medium', 2), ('Hard', 3)], onchange=Gamemode.choose_difficulty, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30,align=pygame_menu.locals.ALIGN_LEFT)
-        gamememode_menu.add.selector('Right Paddle Difficulty:',[('Easy', 1), ('Medium', 2), ('Hard', 3)], onchange=Gamemode.choose_difficulty, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30,align=pygame_menu.locals.ALIGN_RIGHT)
-        gamememode_menu.add.button('Start Game', Gamemode.start_game, background_color=DARK_BLUE, font_color=WHITE, font_size=30)
-        gamememode_menu.add.button('Quit', pygame_menu.events.EXIT, background_color=GRAY, font_color=WHITE, font_size=25)
-        gamememode_menu.add.button('Back to Menu', pygame_menu.events.BACK,
-                                            cursor=pygame_menu.locals.CURSOR_HAND)
+        if game_mode == 'singleplayer':
+            global choose_diff_single_lbl
+            choose_diff_single_lbl = gamememode_menu.add.label('Choose Difficulty Below', max_char=-1, font_size=45, background_color=DARK_BLUE, font_color=WHITE)
+            global choose_diff_single_select
+            choose_diff_single_select = gamememode_menu.add.selector('Computer Difficulty:', [('Easy', 1), ('Medium', 2), ('Hard', 3)], onchange=Gamemode.choose_difficulty_left, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30)
+            global choose_diff_single_start
+            choose_diff_single_start = gamememode_menu.add.button('Start Game', Gamemode.start_game, background_color=DARK_BLUE, font_color=WHITE, font_size=30)
+            global choose_diff_single_quit
+            choose_diff_single_quit = gamememode_menu.add.button('Quit', pygame_menu.events.EXIT, background_color=GRAY, font_color=WHITE, font_size=25)
+            global choose_diff_single_back
+            choose_diff_single_back = gamememode_menu.add.button('Back to Menu', pygame_menu.events.BACK,
+                                                cursor=pygame_menu.locals.CURSOR_HAND)
+        elif game_mode == 'multiplayer':
+            global multi_start
+            multi_start = gamememode_menu.add.button('Start Game', Gamemode.start_game, background_color=DARK_BLUE, font_color=WHITE, font_size=30)
+        else:
+            global choose_diff_multi_lbl
+            choose_diff_multi_lbl = gamememode_menu.add.label('Choose Difficulty Below', max_char=-1, font_size=45, background_color=DARK_BLUE, font_color=WHITE)
+            global choose_diff_multi_select_left
+            choose_diff_multi_select_left = gamememode_menu.add.selector('Left Paddle Difficulty:', [('Easy', 1), ('Medium', 2), ('Hard', 3)], onchange=Gamemode.choose_difficulty_left, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30,align=pygame_menu.locals.ALIGN_LEFT)
+            global choose_diff_multi_select_right
+            choose_diff_multi_select_right = gamememode_menu.add.selector('Right Paddle Difficulty:',[('Easy', 1), ('Medium', 2), ('Hard', 3)], onchange=Gamemode.choose_difficulty_right, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30,align=pygame_menu.locals.ALIGN_RIGHT)
+            global choose_diff_multi_start
+            choose_diff_multi_start = gamememode_menu.add.button('Start Game', Gamemode.start_game, background_color=DARK_BLUE, font_color=WHITE, font_size=30)
+            global choose_diff_multi_quit
+            choose_diff_multi_quit = gamememode_menu.add.button('Quit', pygame_menu.events.EXIT, background_color=GRAY, font_color=WHITE, font_size=25)
+            global choose_diff_multi_back
+            choose_diff_multi_back = gamememode_menu.add.button('Back to Menu', pygame_menu.events.BACK,
+                                                cursor=pygame_menu.locals.CURSOR_HAND)
 
+        if gamememode_menu.get_widget("choose_id") != None:
+            gamememode_menu.remove_widget("choose_id")
+            gamememode_menu.remove_widget("select_id")
+            gamememode_menu.remove_widget("next_id")
+            gamememode_menu.remove_widget("quit_id")
+            gamememode_menu.remove_widget("back_id")
+
+    def reset_ui():
+        if game_mode == 'singleplayer':
+            gamememode_menu.remove_widget(choose_diff_single_lbl)
+            gamememode_menu.remove_widget(choose_diff_single_select)
+            gamememode_menu.remove_widget(choose_diff_single_start)
+            gamememode_menu.remove_widget(choose_diff_single_quit)
+            gamememode_menu.remove_widget(choose_diff_single_back)
+
+        elif game_mode == 'computer vs computer':
+            gamememode_menu.remove_widget(choose_diff_multi_lbl)
+            gamememode_menu.remove_widget(choose_diff_multi_select_left)
+            gamememode_menu.remove_widget(choose_diff_multi_select_right)
+            gamememode_menu.remove_widget(choose_diff_multi_start)
+            gamememode_menu.remove_widget(choose_diff_multi_quit)
+            gamememode_menu.remove_widget(choose_diff_multi_back)
+        else:
+            gamememode_menu.remove_widget(multi_start)
+
+
+        if gamememode_menu.get_widget('choose_id') == None:
+            global choose_gamemode_label
+            choose_gamemode_label = gamememode_menu.add.label('Choose Gamemode Below', 'choose_id', max_char=-1, font_size=45, background_color=DARK_BLUE, font_color=WHITE)
+            global choose_gamemode_selector
+            choose_gamemode_selector = gamememode_menu.add.selector('Gamemode:', [('SinglePlayer', 1), ('MultiPlayer', 2), ('Computer vs Computer', 3)], selector_id='select_id', onchange=Gamemode.set_gamemode, background_color=LIGHT_BLUE, font_color=WHITE, font_size=30)
+            global next_screen_btn_gamemode
+            next_screen_btn_gamemode = gamememode_menu.add.button('Next', Gamemode.update_display, button_id='next_id', background_color=LIGHT_BLUE, font_color=WHITE, font_size=35)
+            global first_gamemode_quit_btn
+            first_gamemode_quit_btn = gamememode_menu.add.button('Quit', pygame_menu.events.EXIT, button_id='quit_id', background_color=DARK_BLUE, font_color=WHITE, font_size=25)
+            global first_gamemode_back_btn
+            first_gamemode_back_btn = gamememode_menu.add.button('Back to Menu', pygame_menu.events.BACK,button_id='back_id',
+                                                cursor=pygame_menu.locals.CURSOR_HAND)
+            
 #class SettingsMenu:
 global resolution
 global fps
@@ -209,7 +270,7 @@ class SettingsMenu():
         #print(f"menu height is now {menu.get_height()}")
         pygame_menu.menu.Menu('heh', resolution[0], resolution[1])
         SettingsMenu.updateMenuSize()
-        init_game(gamemode = 'singleplayer', difficulty = 'medium', resolution= resolution, fps = fps, theme = theme, score = score, paddleSize = paddleSize)
+        init_game(gamemode = 'singleplayer', difficulty_left = 'medium', difficulty_right='medium', resolution= resolution, fps = fps, theme = theme, score = score, paddleSize = paddleSize)
         #updateMenuSize()
         #print(f"Changing to {resolution}")
             
